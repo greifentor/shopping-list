@@ -2,7 +2,7 @@ package de.ollie.shoppinglist.core.service;
 
 import java.time.LocalDateTime;
 
-import de.ollie.shoppinglist.core.service.exception.NotValidException;
+import de.ollie.shoppinglist.core.service.exception.JWTNotValidException;
 import lombok.Value;
 
 /**
@@ -13,6 +13,7 @@ public interface JWTService {
 	@Value
 	public static class AuthorizationData {
 		private String userName;
+		private String applicationName;
 		private LocalDateTime endOfValidity;
 		private String[] userRights;
 	}
@@ -21,7 +22,7 @@ public interface JWTService {
 	 * Returns the neccessary authentication data from the passed JWT.
 	 * 
 	 * @param jwt The JWT whose data are to return.
-	 * @throws NotValidException If the JWT could not be verified.
+	 * @throws JWTNotValidException If the JWT could not be verified.
 	 */
 	AuthorizationData getAuthorizationData(String jwt);
 
