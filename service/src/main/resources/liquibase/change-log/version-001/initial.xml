@@ -1,13 +1,48 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
-	<changeSet author="Archimedes" id="Added-User-Table" >
+	<changeSet author="Archimedes" id="Added-Tables-LIST_POSITION-SHOP-USER-and-ITEM">
+		<createTable tableName="LIST_POSITION">
+			<column name="SHOP" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="DESCRIPTION" type="VARCHAR(500)">
+				<constraints nullable="false" />
+			</column>
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="USER" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addPrimaryKey columnNames="ID" tableName="LIST_POSITION" />
+		<addAutoIncrement columnDataType="BIGINT" columnName="ID" startWith="1" tableName="LIST_POSITION" />
+		<createTable tableName="SHOP">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="USER" type="BIGINT" />
+			<column name="NAME" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addPrimaryKey columnNames="ID" tableName="SHOP" />
+		<addAutoIncrement columnDataType="BIGINT" columnName="ID" startWith="1" tableName="SHOP" />
+		<createTable tableName="ITEM">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="USER" type="BIGINT" />
+			<column name="NAME" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="SHOP" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addPrimaryKey columnNames="ID" tableName="ITEM" />
+		<addAutoIncrement columnDataType="BIGINT" columnName="ID" startWith="1" tableName="ITEM" />
 		<createTable tableName="USER">
-			<column name="PASSWORD" type="VARCHAR(200)">
-				<constraints nullable="false" />
-			</column>
-			<column name="LAST_LOGIN_TIMESTAMP" type="TIMESTAMP">
-				<constraints nullable="false" />
-			</column>
 			<column name="ID" type="BIGINT">
 				<constraints nullable="false" />
 			</column>
@@ -21,5 +56,10 @@
 		</createTable>
 		<addPrimaryKey columnNames="ID" tableName="USER" />
 		<addAutoIncrement columnDataType="BIGINT" columnName="ID" startWith="1" tableName="USER" />
+		<addForeignKeyConstraint baseColumnNames="USER" baseTableName="LIST_POSITION" constraintName="FK_LIST_POSITION_USER_TO_USER_ID" referencedColumnNames="ID" referencedTableName="USER" />
+		<addForeignKeyConstraint baseColumnNames="SHOP" baseTableName="LIST_POSITION" constraintName="FK_LIST_POSITION_SHOP_TO_SHOP_ID" referencedColumnNames="ID" referencedTableName="SHOP" />
+		<addForeignKeyConstraint baseColumnNames="USER" baseTableName="SHOP" constraintName="FK_SHOP_USER_TO_USER_ID" referencedColumnNames="ID" referencedTableName="USER" />
+		<addForeignKeyConstraint baseColumnNames="USER" baseTableName="ITEM" constraintName="FK_ITEM_USER_TO_USER_ID" referencedColumnNames="ID" referencedTableName="USER" />
+		<addForeignKeyConstraint baseColumnNames="SHOP" baseTableName="ITEM" constraintName="FK_ITEM_SHOP_TO_SHOP_ID" referencedColumnNames="ID" referencedTableName="SHOP" />
 	</changeSet>
 </databaseChangeLog>

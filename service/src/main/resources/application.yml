@@ -1,15 +1,21 @@
 app:
     version: @project.version@
+jwt:
+    service:
+        base-validity-in-minutes: 10
+        secret: the-secret
 logging:
     level:
         root: INFO
 log4j2:
     formatMsgNoLookups: true
+server:
+    port: 8081
 spring:
     datasource:
-        url: jdbc:hsqldb:file:../db/content/cube
         driver: org.hsqldb.jdbc.JDBCDriver
-        username: sa
         password:
+        url: jdbc:hsqldb:file:../db/content/shopping-list
+        username: sa
     liquibase:
         change-log: classpath:liquibase/change-log/change-log-master.xml
