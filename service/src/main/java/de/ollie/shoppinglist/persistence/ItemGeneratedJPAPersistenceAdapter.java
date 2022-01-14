@@ -1,5 +1,6 @@
 package de.ollie.shoppinglist.persistence;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -43,6 +44,11 @@ public abstract class ItemGeneratedJPAPersistenceAdapter implements ItemPersiste
 	public Item create(Item model) {
 		model.setId(-1);
 		return converter.toModel(repository.save(converter.toDBO(model)));
+	}
+
+	@Override
+	public List<Item> findAll() {
+		return converter.toModel(repository.findAll());
 	}
 
 	@Override

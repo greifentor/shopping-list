@@ -1,5 +1,7 @@
 package de.ollie.shoppinglist.persistence.converter;
 
+import java.util.List;
+
 /**
  * An interface for converter which are able to convert DBO to model objects.
  *
@@ -11,5 +13,7 @@ package de.ollie.shoppinglist.persistence.converter;
 public interface ToModelConverter<MODEL, DBO> {
 
 	MODEL toModel(DBO dbo);
+
+	List<MODEL> toModel(List<DBO> dbos);
 
 }

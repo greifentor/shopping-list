@@ -1,5 +1,6 @@
 package de.ollie.shoppinglist.core.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -25,6 +26,11 @@ public abstract class UserGeneratedServiceImpl implements UserService {
 	@Override
 	public User create(User model) {
 		return persistencePort.create(model);
+	}
+
+	@Override
+	public List<User> findAll() {
+		return persistencePort.findAll();
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package de.ollie.shoppinglist.persistence.converter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Named;
 
 import lombok.Generated;
@@ -37,6 +40,14 @@ public class UserDBOConverter implements ToModelConverter<User, UserDBO> {
 				.setGlobalId(dbo.getGlobalId())
 				.setName(dbo.getName())
 				.setToken(dbo.getToken());
+	}
+
+	@Override
+	public List<User> toModel(List<UserDBO> dbos) {
+		if (dbos == null) {
+			return null;
+		}
+		return dbos.stream().map(this::toModel).collect(Collectors.toList());
 	}
 
 }

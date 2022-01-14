@@ -8,7 +8,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
 import de.ollie.shoppinglist.core.model.Item;
-import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.Shop;
 import de.ollie.shoppinglist.core.service.ShopService;
 import de.ollie.shoppinglist.core.service.localization.ResourceManager;
@@ -35,8 +34,7 @@ public class ItemDetailsDialog extends Dialog {
 		comboBoxShops
 				.setItems(
 						shopService
-								.findAll(new PageParameters().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(0))
-								.getEntries()
+								.findAll()
 								.stream()
 								.sorted((i0, i1) -> i0.getName().compareTo(i1.getName()))
 								.collect(Collectors.toList()));

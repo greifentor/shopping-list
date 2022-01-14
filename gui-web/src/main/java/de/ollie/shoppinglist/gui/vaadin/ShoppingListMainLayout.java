@@ -4,7 +4,6 @@ import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.service.ItemService;
 import de.ollie.shoppinglist.core.service.ListPositionService;
 import de.ollie.shoppinglist.core.service.ShopService;
@@ -32,8 +31,7 @@ public class ShoppingListMainLayout extends VerticalLayout {
 		accordion = new Accordion();
 		accordion.setWidthFull();
 		shopService
-				.findAll(new PageParameters().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(0))
-				.getEntries()
+				.findAll()
 				.stream()
 				.filter(shop -> shop.getUser().equals(sessionData.getAuthorizationData().getUser().getId()))
 				.forEach(

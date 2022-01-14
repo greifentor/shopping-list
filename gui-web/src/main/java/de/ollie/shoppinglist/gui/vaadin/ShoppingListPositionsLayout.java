@@ -8,7 +8,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import de.ollie.shoppinglist.core.model.Item;
 import de.ollie.shoppinglist.core.model.ListPosition;
-import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.Shop;
 import de.ollie.shoppinglist.core.service.ItemService;
 import de.ollie.shoppinglist.core.service.ListPositionService;
@@ -49,8 +48,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 		comboBoxItems
 				.setItems(
 						itemService
-								.findAll(new PageParameters().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(0))
-								.getEntries()
+								.findAll()
 								.stream()
 								.filter(
 										item -> (item.getUser() != null) || (item
@@ -87,8 +85,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 		gridListPositions
 				.setItems(
 						listPositionService
-								.findAll(new PageParameters().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(0))
-								.getEntries()
+								.findAll()
 								.stream()
 								.filter(this::matchesToShopAndUser));
 	}

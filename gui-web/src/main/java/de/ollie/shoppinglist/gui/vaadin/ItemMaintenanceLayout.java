@@ -8,7 +8,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import de.ollie.shoppinglist.core.model.Item;
-import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.Shop;
 import de.ollie.shoppinglist.core.service.ItemService;
 import de.ollie.shoppinglist.core.service.ShopService;
@@ -93,8 +92,7 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 		gridItems
 				.setItems(
 						itemService
-								.findAll(new PageParameters().setEntriesPerPage(Integer.MAX_VALUE).setPageNumber(0))
-								.getEntries()
+								.findAll()
 								.stream()
 								.sorted((i0, i1) -> i0.getName().compareTo(i1.getName()))
 								.collect(Collectors.toList()));

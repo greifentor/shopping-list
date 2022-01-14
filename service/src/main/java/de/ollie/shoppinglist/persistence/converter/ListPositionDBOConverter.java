@@ -1,5 +1,8 @@
 package de.ollie.shoppinglist.persistence.converter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Named;
 
 import lombok.Generated;
@@ -37,6 +40,14 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 				.setShop(dbo.getShop())
 				.setUser(dbo.getUser())
 				.setDescription(dbo.getDescription());
+	}
+
+	@Override
+	public List<ListPosition> toModel(List<ListPositionDBO> dbos) {
+		if (dbos == null) {
+			return null;
+		}
+		return dbos.stream().map(this::toModel).collect(Collectors.toList());
 	}
 
 }

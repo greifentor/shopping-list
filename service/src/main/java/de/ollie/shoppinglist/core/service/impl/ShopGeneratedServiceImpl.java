@@ -1,5 +1,6 @@
 package de.ollie.shoppinglist.core.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -25,6 +26,11 @@ public abstract class ShopGeneratedServiceImpl implements ShopService {
 	@Override
 	public Shop create(Shop model) {
 		return persistencePort.create(model);
+	}
+
+	@Override
+	public List<Shop> findAll() {
+		return persistencePort.findAll();
 	}
 
 	@Override

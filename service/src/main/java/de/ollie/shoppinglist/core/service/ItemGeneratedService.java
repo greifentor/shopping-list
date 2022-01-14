@@ -1,5 +1,6 @@
 package de.ollie.shoppinglist.core.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import de.ollie.shoppinglist.core.model.Page;
@@ -16,6 +17,8 @@ import lombok.Generated;
 public interface ItemGeneratedService {
 
 	Item create(Item model);
+
+	List<Item> findAll();
 
 	Page<Item> findAll(PageParameters pageParameters);
 
