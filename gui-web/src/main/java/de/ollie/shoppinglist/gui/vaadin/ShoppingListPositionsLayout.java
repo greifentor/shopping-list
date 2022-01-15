@@ -65,6 +65,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 										"ShoppingListPositionsLayout.headers.description.label",
 										sessionData.getLocalization()));
 		gridListPositions.setWidthFull();
+		gridListPositions.addItemDoubleClickListener(event -> removePosition(event.getItem()));
 		updateGridListPositions();
 		add(comboBoxItems, buttonAddPosition, gridListPositions);
 	}
@@ -77,6 +78,13 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 							.setShop(shop.getId())
 							.setUser(sessionData.getAuthorizationData().getUser().getId());
 			listPositionService.create(newListPosition);
+			updateGridListPositions();
+		}
+	}
+
+	private void removePosition(ListPosition listPosition) {
+		if (listPosition != null) {
+			listPositionService.delete(listPosition);
 			updateGridListPositions();
 		}
 	}

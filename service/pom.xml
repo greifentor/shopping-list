@@ -139,6 +139,12 @@
 		<!-- dependency> <groupId>de.ollie</groupId> <artifactId>carp-core</artifactId> 
 			<version>1.0.0</version> </dependency -->
 
+		<!-- JDBC driver -->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

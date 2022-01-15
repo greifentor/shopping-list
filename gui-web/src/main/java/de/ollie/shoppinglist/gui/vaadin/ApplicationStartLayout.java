@@ -84,6 +84,7 @@ public class ApplicationStartLayout extends VerticalLayout implements HasUrlPara
 			sessionData.setLocalization(LocalizationSO.DE);
 			logger.info("session started by user: " + authorizationData.getUser().getName());
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.warn("tried to login with invalid token! (" + e + ")");
 		}
 	}
