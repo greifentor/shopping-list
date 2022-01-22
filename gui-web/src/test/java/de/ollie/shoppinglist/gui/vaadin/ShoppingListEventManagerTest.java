@@ -13,15 +13,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ShoppingListEvent;
+import de.ollie.shoppinglist.core.model.Item;
+import de.ollie.shoppinglist.core.model.Shop;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ActionType;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ItemShoppingListEvent;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ShopShoppingListEvent;
 import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ShoppingListEventListener;
-import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ShoppingListEventType;
 
 @ExtendWith(MockitoExtension.class)
 public class ShoppingListEventManagerTest {
 
-	private static final ShoppingListEvent ITEM_EVENT = new ShoppingListEvent(ShoppingListEventType.ITEM);
-	private static final ShoppingListEvent SHOP_EVENT = new ShoppingListEvent(ShoppingListEventType.SHOP);
+	private static final ItemShoppingListEvent ITEM_EVENT = new ItemShoppingListEvent(ActionType.ADD, new Item());
+	private static final ShopShoppingListEvent SHOP_EVENT = new ShopShoppingListEvent(ActionType.ADD, new Shop());
 
 	@Mock
 	private ShoppingListEventListener listener;

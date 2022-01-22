@@ -13,13 +13,19 @@ import de.ollie.shoppinglist.core.service.ItemService;
 import de.ollie.shoppinglist.core.service.ListPositionService;
 import de.ollie.shoppinglist.core.service.localization.ResourceManager;
 import de.ollie.shoppinglist.gui.SessionData;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ActionType;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ListPositionShoppingListEvent;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ShoppingListEvent;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ShoppingListEventListener;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ShoppingListEventType;
 import de.ollie.shoppinglist.gui.vaadin.component.Button;
 import de.ollie.shoppinglist.gui.vaadin.component.ButtonFactory;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ShoppingListPositionsLayout extends VerticalLayout {
+public class ShoppingListPositionsLayout extends VerticalLayout implements ShoppingListEventListener {
 
+	private final ShoppingListEventManager eventManager;
 	private final ItemService itemService;
 	private final ListPositionService listPositionService;
 	private final ResourceManager resourceManager;
@@ -45,18 +51,8 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 		comboBoxItems = new ComboBox<>();
 		comboBoxItems.setWidthFull();
 		comboBoxItems.setAllowCustomValue(true);
-		comboBoxItems
-				.setItems(
-						itemService
-								.findAll()
-								.stream()
-								.filter(
-										item -> (item.getUser() != null) || (item
-												.getUser()
-												.longValue() == sessionData.getAuthorizationData().getUser().getId()))
-								.filter(item -> (item.getShop() == shop.getId()))
-								.map(Item::getName));
 		gridListPositions = new Grid<>();
+		updateComboBoxItem();
 		gridListPositions
 				.addColumn(listPosition -> listPosition.getDescription())
 				.setHeader(
@@ -70,6 +66,24 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 		add(comboBoxItems, buttonAddPosition, gridListPositions);
 	}
 
+	private void updateComboBoxItem() {
+		if (comboBoxItems != null) {
+			comboBoxItems
+					.setItems(
+							itemService
+									.findAll()
+									.stream()
+									.filter(
+											item -> (item.getUser() != null)
+													|| (item.getUser().longValue() == sessionData
+															.getAuthorizationData()
+															.getUser()
+															.getId()))
+									.filter(item -> (item.getShop() == shop.getId()))
+									.map(Item::getName));
+		}
+	}
+
 	private void addListPosition() {
 		if (comboBoxItems.getValue() != null) {
 			ListPosition newListPosition =
@@ -79,6 +93,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 							.setUser(sessionData.getAuthorizationData().getUser().getId());
 			listPositionService.create(newListPosition);
 			updateGridListPositions();
+			eventManager.fireShoppingListEvent(new ListPositionShoppingListEvent(ActionType.ADD, newListPosition));
 		}
 	}
 
@@ -86,16 +101,14 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 		if (listPosition != null) {
 			listPositionService.delete(listPosition);
 			updateGridListPositions();
+			eventManager.fireShoppingListEvent(new ListPositionShoppingListEvent(ActionType.REMOVE, listPosition));
 		}
 	}
 
 	private void updateGridListPositions() {
-		gridListPositions
-				.setItems(
-						listPositionService
-								.findAll()
-								.stream()
-								.filter(this::matchesToShopAndUser));
+		if (gridListPositions != null) {
+			gridListPositions.setItems(listPositionService.findAll().stream().filter(this::matchesToShopAndUser));
+		}
 	}
 
 	private boolean matchesToShopAndUser(ListPosition listPosition) {
@@ -114,6 +127,13 @@ public class ShoppingListPositionsLayout extends VerticalLayout {
 	protected void onDetach(DetachEvent detachEvent) {
 		// TODO Auto-generated method stub
 		super.onDetach(detachEvent);
+	}
+
+	@Override
+	public void shoppingListEventDetected(ShoppingListEvent<?> event) {
+		if (event.getType() == ShoppingListEventType.ITEM) {
+			updateComboBoxItem();
+		}
 	}
 
 }

@@ -11,21 +11,26 @@ import de.ollie.shoppinglist.core.model.Shop;
 import de.ollie.shoppinglist.core.service.ShopService;
 import de.ollie.shoppinglist.core.service.localization.ResourceManager;
 import de.ollie.shoppinglist.gui.SessionData;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ActionType;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ShopShoppingListEvent;
 import de.ollie.shoppinglist.gui.vaadin.component.Button;
-import de.ollie.shoppinglist.gui.vaadin.component.ButtonFactory;
+import de.ollie.shoppinglist.gui.vaadin.component.ButtonFactory;;
 
 public class ShopMaintenanceLayout extends VerticalLayout {
 
 	private final ResourceManager resourceManager;
 	private final SessionData sessionData;
 	private final ShopService shopService;
+	private final ShoppingListEventManager eventManager;
 
 	private Button buttonEdit;
 	private Button buttonNew;
 	private Button buttonRemove;
 	private Grid<Shop> gridShops;
 
-	public ShopMaintenanceLayout(ShopService shopService, ResourceManager resourceManager, SessionData sessionData) {
+	public ShopMaintenanceLayout(ShopService shopService, ResourceManager resourceManager, SessionData sessionData,
+			ShoppingListEventManager eventManager) {
+		this.eventManager = eventManager;
 		this.resourceManager = resourceManager;
 		this.sessionData = sessionData;
 		this.shopService = shopService;
@@ -77,17 +82,18 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 	}
 
 	private void updateGridShops() {
-		gridShops
-				.setItems(
-						shopService
-								.findAll()
-								.stream()
-								.sorted((s0, s1) -> s0.getName().compareTo(s1.getName()))
-								.collect(Collectors.toList()));
+		if (gridShops != null) {
+			gridShops
+					.setItems(
+							shopService
+									.findAll()
+									.stream()
+									.sorted((s0, s1) -> s0.getName().compareTo(s1.getName()))
+									.collect(Collectors.toList()));
+		}
 	}
 
 	private void editShop() {
-		System.out.println("pressed edit shop button.");
 		if (!gridShops.getSelectedItems().isEmpty()) {
 			Shop shop = gridShops.getSelectedItems().toArray(new Shop[1])[0];
 			new ShopDetailsDialog(shop, event -> saveShop(shop), resourceManager, sessionData).open();
@@ -95,22 +101,22 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 	}
 
 	private void newShop() {
-		System.out.println("pressed new shop button.");
 		Shop shop = new Shop().setName("").setUser(sessionData.getAuthorizationData().getUser().getId());
 		new ShopDetailsDialog(shop, event -> saveShop(shop), resourceManager, sessionData).open();
 	}
 
 	private void saveShop(Shop shop) {
-		shopService.update(shop);
+		shop = shopService.update(shop);
 		updateGridShops();
+		eventManager.fireShoppingListEvent(new ShopShoppingListEvent(ActionType.ADD, shop));
 	}
 
 	private void removeShop() {
-		System.out.println("pressed remove shop button.");
 		if (!gridShops.getSelectedItems().isEmpty()) {
 			Shop shop = gridShops.getSelectedItems().toArray(new Shop[1])[0];
 			shopService.delete(shop);
 			updateGridShops();
+			eventManager.fireShoppingListEvent(new ShopShoppingListEvent(ActionType.REMOVE, shop));
 		}
 	}
 

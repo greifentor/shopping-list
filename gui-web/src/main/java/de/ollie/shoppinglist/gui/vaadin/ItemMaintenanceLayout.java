@@ -13,13 +13,16 @@ import de.ollie.shoppinglist.core.service.ItemService;
 import de.ollie.shoppinglist.core.service.ShopService;
 import de.ollie.shoppinglist.core.service.localization.ResourceManager;
 import de.ollie.shoppinglist.gui.SessionData;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ActionType;
+import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ItemShoppingListEvent;
 import de.ollie.shoppinglist.gui.vaadin.component.Button;
 import de.ollie.shoppinglist.gui.vaadin.component.ButtonFactory;
 
 public class ItemMaintenanceLayout extends VerticalLayout {
 
-	private final ResourceManager resourceManager;
+	private final ShoppingListEventManager eventManager;
 	private final ItemService itemService;
+	private final ResourceManager resourceManager;
 	private final SessionData sessionData;
 	private final ShopService shopService;
 
@@ -29,11 +32,12 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 	private Grid<Item> gridItems;
 
 	public ItemMaintenanceLayout(ItemService itemService, ResourceManager resourceManager, SessionData sessionData,
-			ShopService shopService) {
+			ShopService shopService, ShoppingListEventManager eventManager) {
+		this.eventManager = eventManager;
+		this.itemService = itemService;
 		this.resourceManager = resourceManager;
 		this.sessionData = sessionData;
 		this.shopService = shopService;
-		this.itemService = itemService;
 		gridItems = new Grid<>(10);
 		gridItems
 				.addColumn(shop -> shop.getName())
@@ -99,7 +103,6 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 	}
 
 	private void editItem() {
-		System.out.println("pressed edit item button.");
 		if (!gridItems.getSelectedItems().isEmpty()) {
 			Item item = gridItems.getSelectedItems().toArray(new Item[1])[0];
 			new ItemDetailsDialog(item, event -> saveItem(item), resourceManager, sessionData, shopService).open();
@@ -107,21 +110,21 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 	}
 
 	private void newItem() {
-		System.out.println("pressed new item button.");
 		Item item = new Item().setName("").setUser(sessionData.getAuthorizationData().getUser().getId());
 		new ItemDetailsDialog(item, event -> saveItem(item), resourceManager, sessionData, shopService).open();
 	}
 
 	private void saveItem(Item item) {
 		itemService.update(item);
+		eventManager.fireShoppingListEvent(new ItemShoppingListEvent(ActionType.ADD, item));
 		updateGridItems();
 	}
 
 	private void removeItem() {
-		System.out.println("pressed remove item button.");
 		if (!gridItems.getSelectedItems().isEmpty()) {
 			Item item = gridItems.getSelectedItems().toArray(new Item[1])[0];
 			itemService.delete(item);
+			eventManager.fireShoppingListEvent(new ItemShoppingListEvent(ActionType.REMOVE, item));
 			updateGridItems();
 		}
 	}
