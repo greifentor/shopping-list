@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>de.ollie</groupId>
 		<artifactId>shopping-list</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 
 	<artifactId>shopping-list-gui-web</artifactId>
@@ -172,7 +172,7 @@
 		<dependency>
 			<groupId>de.ollie</groupId>
 			<artifactId>shopping-list-service</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 	</dependencies>
 
