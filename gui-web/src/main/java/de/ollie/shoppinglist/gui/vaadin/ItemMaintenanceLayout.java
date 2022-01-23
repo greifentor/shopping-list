@@ -39,8 +39,10 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 		this.sessionData = sessionData;
 		this.shopService = shopService;
 		gridItems = new Grid<>(10);
+		gridItems.setMultiSort(true);
 		gridItems
-				.addColumn(shop -> shop.getName())
+				.addColumn(item -> item.getName())
+				.setComparator((i0, i1) -> i0.getName().compareTo(i1.getName()))
 				.setHeader(
 						resourceManager
 								.getLocalizedString(
