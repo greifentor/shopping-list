@@ -31,5 +31,7 @@ public class ShopDBO {
 	private Long user;
 	@Column(name = "NAME", nullable = false)
 	private String name;
+	@Column(name = "SORT_ORDER", nullable = false)
+	private int sortOrder;
 
 }

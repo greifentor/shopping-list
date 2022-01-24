@@ -39,7 +39,12 @@ public class HeaderLayout extends HorizontalLayout {
 		layout.getStyle().set("-moz-border-radius", "4px");
 		layout.getStyle().set("-webkit-border-radius", "4px");
 		layout.getStyle().set("border-radius", "4px");
-		layout.getStyle().set("border", "1px solid LightSteelBlue");
+		layout.getStyle().set("border", "1px solid gray");
+		layout
+				.getStyle()
+				.set(
+						"box-shadow",
+						"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4");
 	}
 
 	private HorizontalLayout getInnerLayout(Button buttonBack, Button buttonLogout, String labelText) {
@@ -51,13 +56,7 @@ public class HeaderLayout extends HorizontalLayout {
 		label.getStyle().set("display", "flex");
 		label.getStyle().set("align-items", "center");
 		label.getStyle().set("font-weight", "bold");
-		buttonLogout.setWidth("15%");
-		if (buttonBack == null) {
-			headerInner.add(label, buttonLogout);
-		} else {
-			buttonBack.setWidth("15%");
-			headerInner.add(label, buttonLogout, buttonBack);
-		}
+		headerInner.add(label);
 		return headerInner;
 	}
 }

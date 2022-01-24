@@ -27,11 +27,11 @@ public class ListPositionDBO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable = false)
 	private long id;
+	@Column(name = "ITEM", nullable = false)
+	private long item;
 	@Column(name = "SHOP", nullable = false)
 	private long shop;
 	@Column(name = "USER", nullable = false)
 	private long user;
-	@Column(name = "DESCRIPTION", nullable = false)
-	private String description;
 
 }

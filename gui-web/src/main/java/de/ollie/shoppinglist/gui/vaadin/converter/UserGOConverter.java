@@ -16,6 +16,7 @@ import de.ollie.shoppinglist.core.model.User;
 @Named
 public class UserGOConverter implements ToGOConverter<UserGO, User> {
 
+	@Override
 	public UserGO toGO(User model) {
 		if (model == null) {
 			return null;

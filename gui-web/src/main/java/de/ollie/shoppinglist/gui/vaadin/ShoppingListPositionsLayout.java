@@ -33,7 +33,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 	private final SessionData sessionData;
 
 	private Button buttonAddPosition;
-	private ComboBox<String> comboBoxItems;
+	private ComboBox<Item> comboBoxItems;
 	private Grid<ListPosition> gridListPositions;
 
 	@Override
@@ -51,10 +51,11 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 		comboBoxItems = new ComboBox<>();
 		comboBoxItems.setWidthFull();
 		comboBoxItems.setAllowCustomValue(true);
+		comboBoxItems.setItemLabelGenerator(item -> item.getName());
 		gridListPositions = new Grid<>();
 		updateComboBoxItem();
 		gridListPositions
-				.addColumn(listPosition -> listPosition.getDescription())
+				.addColumn(listPosition -> getItemName(listPosition.getItem()))
 				.setHeader(
 						resourceManager
 								.getLocalizedString(
@@ -64,6 +65,10 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 		gridListPositions.addItemDoubleClickListener(event -> removePosition(event.getItem()));
 		updateGridListPositions();
 		add(comboBoxItems, buttonAddPosition, gridListPositions);
+	}
+
+	private String getItemName(long id) {
+		return itemService.findById(id).map(Item::getName).orElse("-");
 	}
 
 	private void updateComboBoxItem() {
@@ -80,7 +85,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 															.getUser()
 															.getId()))
 									.filter(item -> (item.getShop() == shop.getId()))
-									.map(Item::getName));
+									.sorted((i0, i1) -> i0.getName().compareTo(i1.getName())));
 		}
 	}
 
@@ -88,7 +93,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 		if (comboBoxItems.getValue() != null) {
 			ListPosition newListPosition =
 					new ListPosition()
-							.setDescription(comboBoxItems.getValue())
+							.setItem(comboBoxItems.getValue().getId())
 							.setShop(shop.getId())
 							.setUser(sessionData.getAuthorizationData().getUser().getId());
 			listPositionService.create(newListPosition);
@@ -107,8 +112,18 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 
 	private void updateGridListPositions() {
 		if (gridListPositions != null) {
-			gridListPositions.setItems(listPositionService.findAll().stream().filter(this::matchesToShopAndUser));
+			gridListPositions
+					.setItems(
+							listPositionService
+									.findAll()
+									.stream()
+									.filter(this::matchesToShopAndUser)
+									.sorted((lp0, lp1) -> getPosition(lp0.getItem()) - getPosition(lp1.getItem())));
 		}
+	}
+
+	private int getPosition(long id) {
+		return itemService.findById(id).map(item -> item.getPosition()).orElse(0);
 	}
 
 	private boolean matchesToShopAndUser(ListPosition listPosition) {

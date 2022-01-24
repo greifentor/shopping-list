@@ -18,5 +18,6 @@ public class ItemGO {
 	private long shop;
 	private long user;
 	private String name;
+	private int position;
 
 }

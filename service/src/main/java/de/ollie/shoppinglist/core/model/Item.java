@@ -18,5 +18,6 @@ public class Item {
 	private long shop;
 	private Long user;
 	private String name;
+	private int position;
 
 }

@@ -25,9 +25,9 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 		}
 		return new ListPositionDBO()
 				.setId(model.getId())
+				.setItem(model.getItem())
 				.setShop(model.getShop())
-				.setUser(model.getUser())
-				.setDescription(model.getDescription());
+				.setUser(model.getUser());
 	}
 
 	@Override
@@ -37,9 +37,9 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 		}
 		return new ListPosition()
 				.setId(dbo.getId())
+				.setItem(dbo.getItem())
 				.setShop(dbo.getShop())
-				.setUser(dbo.getUser())
-				.setDescription(dbo.getDescription());
+				.setUser(dbo.getUser());
 	}
 
 	@Override

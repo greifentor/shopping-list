@@ -16,6 +16,7 @@ import de.ollie.shoppinglist.core.model.Shop;
 @Named
 public class ShopGOConverter implements ToGOConverter<ShopGO, Shop> {
 
+	@Override
 	public ShopGO toGO(Shop model) {
 		if (model == null) {
 			return null;
@@ -23,7 +24,8 @@ public class ShopGOConverter implements ToGOConverter<ShopGO, Shop> {
 		return new ShopGO()
 				.setId(model.getId())
 				.setUser(model.getUser())
-				.setName(model.getName());
+				.setName(model.getName())
+				.setSortOrder(model.getSortOrder());
 	}
 
 	public Shop toModel(ShopGO go) {
@@ -33,7 +35,8 @@ public class ShopGOConverter implements ToGOConverter<ShopGO, Shop> {
 		return new Shop()
 				.setId(go.getId())
 				.setUser(go.getUser())
-				.setName(go.getName());
+				.setName(go.getName())
+				.setSortOrder(go.getSortOrder());
 	}
 
 }

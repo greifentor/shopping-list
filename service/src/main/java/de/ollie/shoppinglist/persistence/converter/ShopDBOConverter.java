@@ -26,7 +26,8 @@ public class ShopDBOConverter implements ToModelConverter<Shop, ShopDBO> {
 		return new ShopDBO()
 				.setId(model.getId())
 				.setUser(model.getUser())
-				.setName(model.getName());
+				.setName(model.getName())
+				.setSortOrder(model.getSortOrder());
 	}
 
 	@Override
@@ -37,7 +38,8 @@ public class ShopDBOConverter implements ToModelConverter<Shop, ShopDBO> {
 		return new Shop()
 				.setId(dbo.getId())
 				.setUser(dbo.getUser())
-				.setName(dbo.getName());
+				.setName(dbo.getName())
+				.setSortOrder(dbo.getSortOrder());
 	}
 
 	@Override

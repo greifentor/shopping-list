@@ -37,10 +37,19 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 		gridShops = new Grid<>(10);
 		gridShops
 				.addColumn(shop -> shop.getName())
+				.setComparator((s0, s1) -> s0.getName().compareTo(s1.getName()))
 				.setHeader(
 						resourceManager
 								.getLocalizedString(
 										"ShopMaintenanceLayout.headers.name.label",
+										sessionData.getLocalization()));
+		gridShops
+				.addColumn(shop -> shop.getSortOrder())
+				.setComparator((s0, s1) -> s0.getSortOrder() - s1.getSortOrder())
+				.setHeader(
+						resourceManager
+								.getLocalizedString(
+										"ShopMaintenanceLayout.headers.sortOrder.label",
 										sessionData.getLocalization()));
 		gridShops.setWidthFull();
 		updateGridShops();

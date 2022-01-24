@@ -47,13 +47,20 @@ public class ShoppingListMainLayout extends VerticalLayout implements ShoppingLi
 		layout.getStyle().set("-moz-border-radius", "4px");
 		layout.getStyle().set("-webkit-border-radius", "4px");
 		layout.getStyle().set("border-radius", "4px");
-		layout.getStyle().set("border", "1px solid LightSteelBlue");
+		layout.getStyle().set("border", "1px solid gray");
+		layout
+				.getStyle()
+				.set(
+						"box-shadow",
+						"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4");
+
 		accordion = new Accordion();
 		accordion.setWidthFull();
 		shopService
 				.findAll()
 				.stream()
 				.filter(shop -> shop.getUser().equals(sessionData.getAuthorizationData().getUser().getId()))
+				.sorted((s0, s1) -> s0.getSortOrder() - s1.getSortOrder())
 				.forEach(shop -> shopAccordionPanels.add(createShopAccordionPanel(shop)));
 		accordionPanelShop =
 				new AccordionPanel(

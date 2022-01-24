@@ -49,17 +49,30 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 										"ItemMaintenanceLayout.headers.name.label",
 										sessionData.getLocalization()));
 		gridItems
-				.addColumn(item -> shopService.findById(item.getShop()).map(Shop::getName).orElse("n/a"))
+				.addColumn(item -> getShopName(item.getShop()))
+				.setComparator((i0, i1) -> getShopName(i0.getShop()).compareTo(getShopName(i1.getShop())))
 				.setHeader(
 						resourceManager
 								.getLocalizedString(
 										"ItemMaintenanceLayout.headers.shop.label",
+										sessionData.getLocalization()));
+		gridItems
+				.addColumn(item -> item.getPosition())
+				.setComparator((i0, i1) -> i0.getPosition() - i1.getPosition())
+				.setHeader(
+						resourceManager
+								.getLocalizedString(
+										"ItemMaintenanceLayout.headers.position.label",
 										sessionData.getLocalization()));
 		gridItems.setWidthFull();
 		updateGridItems();
 		setMargin(false);
 		setWidthFull();
 		add(createButtonLayout(), gridItems);
+	}
+
+	private String getShopName(long id) {
+		return shopService.findById(id).map(Shop::getName).orElse("n/a");
 	}
 
 	private HorizontalLayout createButtonLayout() {

@@ -16,15 +16,16 @@ import de.ollie.shoppinglist.core.model.ListPosition;
 @Named
 public class ListPositionGOConverter implements ToGOConverter<ListPositionGO, ListPosition> {
 
+	@Override
 	public ListPositionGO toGO(ListPosition model) {
 		if (model == null) {
 			return null;
 		}
 		return new ListPositionGO()
 				.setId(model.getId())
+				.setItem(model.getItem())
 				.setShop(model.getShop())
-				.setUser(model.getUser())
-				.setDescription(model.getDescription());
+				.setUser(model.getUser());
 	}
 
 	public ListPosition toModel(ListPositionGO go) {
@@ -33,9 +34,9 @@ public class ListPositionGOConverter implements ToGOConverter<ListPositionGO, Li
 		}
 		return new ListPosition()
 				.setId(go.getId())
+				.setItem(go.getItem())
 				.setShop(go.getShop())
-				.setUser(go.getUser())
-				.setDescription(go.getDescription());
+				.setUser(go.getUser());
 	}
 
 }
