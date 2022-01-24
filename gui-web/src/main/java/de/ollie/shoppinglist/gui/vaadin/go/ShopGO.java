@@ -17,5 +17,6 @@ public class ShopGO {
 	private long id;
 	private long user;
 	private String name;
+	private int sortOrder;
 
 }
