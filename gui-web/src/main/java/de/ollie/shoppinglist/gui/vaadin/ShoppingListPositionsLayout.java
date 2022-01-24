@@ -56,10 +56,19 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 		updateComboBoxItem();
 		gridListPositions
 				.addColumn(listPosition -> getItemName(listPosition.getItem()))
+				.setComparator((lp0, lp1) -> getItemName(lp0.getItem()).compareTo(getItemName(lp1.getItem())))
 				.setHeader(
 						resourceManager
 								.getLocalizedString(
 										"ShoppingListPositionsLayout.headers.description.label",
+										sessionData.getLocalization()));
+		gridListPositions
+				.addColumn(listPosition -> getSortOrder(listPosition.getItem()))
+				.setComparator((lp0, lp1) -> getSortOrder(lp0.getItem()) - getSortOrder(lp1.getItem()))
+				.setHeader(
+						resourceManager
+								.getLocalizedString(
+										"ShoppingListPositionsLayout.headers.sortOrder.label",
 										sessionData.getLocalization()));
 		gridListPositions.setWidthFull();
 		gridListPositions.addItemDoubleClickListener(event -> removePosition(event.getItem()));
@@ -118,12 +127,12 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 									.findAll()
 									.stream()
 									.filter(this::matchesToShopAndUser)
-									.sorted((lp0, lp1) -> getPosition(lp0.getItem()) - getPosition(lp1.getItem())));
+									.sorted((lp0, lp1) -> getSortOrder(lp0.getItem()) - getSortOrder(lp1.getItem())));
 		}
 	}
 
-	private int getPosition(long id) {
-		return itemService.findById(id).map(item -> item.getPosition()).orElse(0);
+	private int getSortOrder(long id) {
+		return itemService.findById(id).map(item -> item.getSortOrder()).orElse(0);
 	}
 
 	private boolean matchesToShopAndUser(ListPosition listPosition) {

@@ -26,7 +26,7 @@ public class ItemGOConverter implements ToGOConverter<ItemGO, Item> {
 				.setShop(model.getShop())
 				.setUser(model.getUser())
 				.setName(model.getName())
-				.setPosition(model.getPosition());
+				.setSortOrder(model.getSortOrder());
 	}
 
 	public Item toModel(ItemGO go) {
@@ -38,7 +38,7 @@ public class ItemGOConverter implements ToGOConverter<ItemGO, Item> {
 				.setShop(go.getShop())
 				.setUser(go.getUser())
 				.setName(go.getName())
-				.setPosition(go.getPosition());
+				.setSortOrder(go.getSortOrder());
 	}
 
 }

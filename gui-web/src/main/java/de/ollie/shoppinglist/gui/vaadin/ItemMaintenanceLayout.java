@@ -57,8 +57,8 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 										"ItemMaintenanceLayout.headers.shop.label",
 										sessionData.getLocalization()));
 		gridItems
-				.addColumn(item -> item.getPosition())
-				.setComparator((i0, i1) -> i0.getPosition() - i1.getPosition())
+				.addColumn(item -> item.getSortOrder())
+				.setComparator((i0, i1) -> i0.getSortOrder() - i1.getSortOrder())
 				.setHeader(
 						resourceManager
 								.getLocalizedString(

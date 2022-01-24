@@ -24,7 +24,7 @@ public class ItemDetailsDialog extends Dialog {
 
 	private ComboBox<Shop> comboBoxShops;
 	private TextField textFieldName;
-	private NumberField numberFieldPosition;
+	private NumberField numberFieldSortOrder;
 
 	public ItemDetailsDialog(Item item, ItemDetailsDialogObserver observer, ResourceManager resourceManager,
 			SessionData sessionData, ShopService shopService) {
@@ -49,24 +49,24 @@ public class ItemDetailsDialog extends Dialog {
 										sessionData.getLocalization()));
 		textFieldName.setWidthFull();
 		textFieldName.setValue(item.getName());
-		numberFieldPosition =
+		numberFieldSortOrder =
 				new NumberField(
 						resourceManager
 								.getLocalizedString(
-										"ItemDetailsDialog.textFieldName.label",
+										"ItemDetailsDialog.numberFieldSortOrder.label",
 										sessionData.getLocalization()));
-		numberFieldPosition.setWidthFull();
-		numberFieldPosition.setMax(Integer.MAX_VALUE);
-		numberFieldPosition.setMin(0);
-		numberFieldPosition.setStep(1);
-		numberFieldPosition.setValue((double) item.getPosition());
-		numberFieldPosition.setHasControls(true);
+		numberFieldSortOrder.setWidthFull();
+		numberFieldSortOrder.setMax(Integer.MAX_VALUE);
+		numberFieldSortOrder.setMin(0);
+		numberFieldSortOrder.setStep(1);
+		numberFieldSortOrder.setValue((double) item.getSortOrder());
+		numberFieldSortOrder.setHasControls(true);
 		Button buttonCancel = ButtonFactory.createCancelButton(resourceManager, event -> cancelDialog(), sessionData);
 		buttonCancel.setWidthFull();
 		Button buttonOk =
 				ButtonFactory.createOkButton(resourceManager, event -> submitItem(item, observer), sessionData);
 		buttonOk.setWidthFull();
-		layout.add(textFieldName, comboBoxShops, numberFieldPosition, buttonCancel, buttonOk);
+		layout.add(textFieldName, comboBoxShops, numberFieldSortOrder, buttonCancel, buttonOk);
 		add(layout);
 	}
 
@@ -76,7 +76,7 @@ public class ItemDetailsDialog extends Dialog {
 
 	private void submitItem(Item item, ItemDetailsDialogObserver observer) {
 		item.setName(textFieldName.getValue());
-		item.setPosition(numberFieldPosition.getValue().intValue());
+		item.setSortOrder(numberFieldSortOrder.getValue().intValue());
 		item.setShop(comboBoxShops.getValue().getId());
 		close();
 		observer.itemChanged(item);

@@ -66,11 +66,22 @@
 		<addForeignKeyConstraint baseColumnNames="USER" baseTableName="ITEM" constraintName="FK_ITEM_USER_TO_USER_ID" referencedColumnNames="ID" referencedTableName="USER" />
 		<addForeignKeyConstraint baseColumnNames="SHOP" baseTableName="ITEM" constraintName="FK_ITEM_SHOP_TO_SHOP_ID" referencedColumnNames="ID" referencedTableName="SHOP" />
 	</changeSet>
-	<changeSet author="Archimedes" id="Added-SORT_ORDER-for-Shops" >
+	<changeSet author="Archimedes" id="Added-SORT_ORDER-for-Shops">
 		<addColumn tableName="SHOP">
 			<column name="SORT_ORDER" type="INTEGER">
 				<constraints nullable="false" />
 			</column>
 		</addColumn>
+	</changeSet>
+	<changeSet author="Archimedes" id="Change-POSITION-to-SORT_ORDER-in-table-ITEM">
+		<addColumn tableName="ITEM">
+			<column name="SORT_ORDER" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+		</addColumn>
+		<sql>update ITEM set SORT_ORDER = POSITION</sql>
+		<dropColumn tableName="ITEM">
+			<column name="POSITION" />
+		</dropColumn>
 	</changeSet>
 </databaseChangeLog>

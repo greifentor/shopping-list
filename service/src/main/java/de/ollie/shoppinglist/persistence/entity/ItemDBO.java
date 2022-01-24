@@ -33,7 +33,7 @@ public class ItemDBO {
 	private Long user;
 	@Column(name = "NAME", nullable = false)
 	private String name;
-	@Column(name = "POSITION", nullable = false)
-	private int position;
+	@Column(name = "SORT_ORDER", nullable = false)
+	private int sortOrder;
 
 }

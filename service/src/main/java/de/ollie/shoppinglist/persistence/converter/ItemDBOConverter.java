@@ -28,7 +28,7 @@ public class ItemDBOConverter implements ToModelConverter<Item, ItemDBO> {
 				.setShop(model.getShop())
 				.setUser(model.getUser())
 				.setName(model.getName())
-				.setPosition(model.getPosition());
+				.setSortOrder(model.getSortOrder());
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class ItemDBOConverter implements ToModelConverter<Item, ItemDBO> {
 				.setShop(dbo.getShop())
 				.setUser(dbo.getUser())
 				.setName(dbo.getName())
-				.setPosition(dbo.getPosition());
+				.setSortOrder(dbo.getSortOrder());
 	}
 
 	@Override
