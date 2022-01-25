@@ -27,4 +27,6 @@ public interface JWTService {
 
 	AuthorizationData getAuthorizationData(String jwt);
 
+	LocalDateTime getEndOfValidity(String jwt);
+
 }

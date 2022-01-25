@@ -1,5 +1,8 @@
 package de.ollie.shoppinglist.gui.vaadin;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -25,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShoppingListPositionsLayout extends VerticalLayout implements ShoppingListEventListener {
 
+	private static final Logger logger = LogManager.getLogger(ShoppingListPositionsLayout.class);
+
 	private final ShoppingListEventManager eventManager;
 	private final ItemService itemService;
 	private final ListPositionService listPositionService;
@@ -39,6 +44,9 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 	@Override
 	protected void onAttach(AttachEvent attachEvent) {
 		super.onAttach(attachEvent);
+		if (!sessionData.getAccessChecker().checkToken()) {
+			return;
+		}
 		removeAll();
 		buttonAddPosition =
 				ButtonFactory
@@ -74,6 +82,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 		gridListPositions.addItemDoubleClickListener(event -> removePosition(event.getItem()));
 		updateGridListPositions();
 		add(comboBoxItems, buttonAddPosition, gridListPositions);
+		logger.info("attached");
 	}
 
 	private String getItemName(long id) {
@@ -99,6 +108,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 	}
 
 	private void addListPosition() {
+		sessionData.getAccessChecker().checkToken();
 		if (comboBoxItems.getValue() != null) {
 			ListPosition newListPosition =
 					new ListPosition()
@@ -149,8 +159,8 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 
 	@Override
 	protected void onDetach(DetachEvent detachEvent) {
-		// TODO Auto-generated method stub
 		super.onDetach(detachEvent);
+		logger.info("detached");
 	}
 
 	@Override

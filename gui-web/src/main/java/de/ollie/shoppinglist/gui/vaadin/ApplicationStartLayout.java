@@ -1,5 +1,6 @@
 package de.ollie.shoppinglist.gui.vaadin;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import de.ollie.shoppinglist.core.service.ListPositionService;
 import de.ollie.shoppinglist.core.service.ShopService;
 import de.ollie.shoppinglist.core.service.UserService;
 import de.ollie.shoppinglist.core.service.localization.ResourceManager;
+import de.ollie.shoppinglist.gui.AccessChecker;
 import de.ollie.shoppinglist.gui.SessionData;
 import de.ollie.shoppinglist.gui.WebAppConfiguration;
 import de.ollie.shoppinglist.gui.vaadin.component.Button;
@@ -49,7 +51,7 @@ import lombok.RequiredArgsConstructor;
 @CssImport("./styles/shared-styles.css")
 @CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
 @RequiredArgsConstructor
-public class ApplicationStartLayout extends VerticalLayout implements HasUrlParameter<String> {
+public class ApplicationStartLayout extends VerticalLayout implements AccessChecker, HasUrlParameter<String> {
 
 	public static final LocalizationSO LOCALIZATION = LocalizationSO.DE;
 	public static final String URL = "shopping-list";
@@ -80,6 +82,7 @@ public class ApplicationStartLayout extends VerticalLayout implements HasUrlPara
 		}
 		try {
 			authorizationData = jwtService.getAuthorizationData(token);
+			sessionData.setAccessChecker(this);
 			sessionData.setAuthorizationData(authorizationData);
 			sessionData.setLocalization(LocalizationSO.DE);
 			logger.info("session started by user: " + authorizationData.getUser().getName());
@@ -118,12 +121,7 @@ public class ApplicationStartLayout extends VerticalLayout implements HasUrlPara
 								+ " (" + webAppConfiguration.getAppVersion() + ")",
 						HeaderLayoutMode.WRAPPED);
 		if (authorizationData == null) {
-			Label label = new Label(resourceManager.getLocalizedString("Error.notAuthorized.label.text", LOCALIZATION));
-			label.getStyle().set("color", "red");
-			HorizontalLayout layout = new HorizontalLayout();
-			layout.setMargin(true);
-			layout.add(label);
-			add(layout);
+			denyAccess();
 		} else {
 			add(
 					headerLayout,
@@ -134,6 +132,28 @@ public class ApplicationStartLayout extends VerticalLayout implements HasUrlPara
 							resourceManager,
 							sessionData));
 		}
+	}
+
+	@Override
+	public boolean checkToken() {
+		if (jwtService
+				.getEndOfValidity(token)
+				.plusMinutes(webAppConfiguration.getMaximumJWTValidityInMinutes())
+				.isBefore(LocalDateTime.now())) {
+			denyAccess();
+			return false;
+		}
+		return true;
+	}
+
+	public void denyAccess() {
+		removeAll();
+		Label label = new Label(resourceManager.getLocalizedString("Error.notAuthorized.label.text", LOCALIZATION));
+		label.getStyle().set("color", "red");
+		HorizontalLayout layout = new HorizontalLayout();
+		layout.setMargin(true);
+		layout.add(label);
+		add(layout);
 	}
 
 	private void switchToCube() {

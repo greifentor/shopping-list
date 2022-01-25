@@ -101,4 +101,9 @@ public class JWTServiceImpl implements JWTService {
 												.setToken(decodedJWT.getClaims().get("userToken").asString())));
 	}
 
+	@Override
+	public LocalDateTime getEndOfValidity(String jwt) {
+		return getLocalDateTime(decodeJWT(jwt).getClaims().get("endOfValidity").asString());
+	}
+
 }

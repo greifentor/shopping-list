@@ -24,5 +24,6 @@ public class SessionData {
 	private AuthorizationData authorizationData;
 	private SessionIdGO id = new SessionIdGO("SHOPPING-LIST-SESSION-" + (counter++));
 	private LocalizationSO localization = LocalizationSO.DE;
+	private AccessChecker accessChecker;
 
 }

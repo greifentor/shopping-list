@@ -167,6 +167,23 @@ class JWTServiceImplTest {
 
 	}
 
+	@Nested
+	class TestsOfMethod_getEndOfvalidity_String {
+
+		@Test
+		void passAJWTWithoutAnEndOfValidity_throwsAnException() {
+			// Prepare
+			when(configuration.getSecret()).thenReturn(SECRET);
+			// Run & Check
+			assertEquals(
+					END_OF_VALIDITY,
+					unitUnderTest
+							.getEndOfValidity(
+									createJWT(USER_NAME, APPLICATION_NAME, END_OF_VALIDITY, APPLICATION_RIGHTS)));
+		}
+
+	}
+
 	private static String createFullyLoadedJWT() {
 		return createJWT(USER_NAME, APPLICATION_NAME, END_OF_VALIDITY, APPLICATION_RIGHTS);
 	}

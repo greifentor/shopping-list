@@ -15,4 +15,7 @@ public class WebAppConfiguration {
 	@Value("${cube.url}")
 	private String cubeURL;
 
+	@Value("${maximum.jwt.validity-in-minutes:60}")
+	private int maximumJWTValidityInMinutes;
+
 }
