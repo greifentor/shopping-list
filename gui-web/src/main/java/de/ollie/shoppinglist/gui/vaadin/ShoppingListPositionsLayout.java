@@ -79,7 +79,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 										"ShoppingListPositionsLayout.headers.sortOrder.label",
 										sessionData.getLocalization()));
 		gridListPositions.setWidthFull();
-		gridListPositions.addItemDoubleClickListener(event -> removePosition(event.getItem()));
+		gridListPositions.addItemClickListener(event -> removePosition(event.getItem()));
 		updateGridListPositions();
 		add(comboBoxItems, buttonAddPosition, gridListPositions);
 		logger.info("attached");
@@ -122,14 +122,18 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 	}
 
 	private void removePosition(ListPosition listPosition) {
+		sessionData.getAccessChecker().checkToken();
 		if (listPosition != null) {
-			listPositionService.delete(listPosition);
+			new ShoppingListPositionDetailsDialog(listPosition, lp -> {
+				listPositionService.delete(lp);
 			updateGridListPositions();
-			eventManager.fireShoppingListEvent(new ListPositionShoppingListEvent(ActionType.REMOVE, listPosition));
+				eventManager.fireShoppingListEvent(new ListPositionShoppingListEvent(ActionType.REMOVE, lp));
+			}, itemService, resourceManager, sessionData).open();
 		}
 	}
 
 	private void updateGridListPositions() {
+		sessionData.getAccessChecker().checkToken();
 		if (gridListPositions != null) {
 			gridListPositions
 					.setItems(
@@ -160,6 +164,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 	@Override
 	protected void onDetach(DetachEvent detachEvent) {
 		super.onDetach(detachEvent);
+		sessionData.getAccessChecker().checkToken();
 		logger.info("detached");
 	}
 

@@ -103,6 +103,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 	}
 
 	private void editShop() {
+		sessionData.getAccessChecker().checkToken();
 		if (!gridShops.getSelectedItems().isEmpty()) {
 			Shop shop = gridShops.getSelectedItems().toArray(new Shop[1])[0];
 			new ShopDetailsDialog(shop, event -> saveShop(shop), resourceManager, sessionData).open();
@@ -110,17 +111,20 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 	}
 
 	private void newShop() {
+		sessionData.getAccessChecker().checkToken();
 		Shop shop = new Shop().setName("").setUser(sessionData.getAuthorizationData().getUser().getId());
 		new ShopDetailsDialog(shop, event -> saveShop(shop), resourceManager, sessionData).open();
 	}
 
 	private void saveShop(Shop shop) {
+		sessionData.getAccessChecker().checkToken();
 		shop = shopService.update(shop);
 		updateGridShops();
 		eventManager.fireShoppingListEvent(new ShopShoppingListEvent(ActionType.ADD, shop));
 	}
 
 	private void removeShop() {
+		sessionData.getAccessChecker().checkToken();
 		if (!gridShops.getSelectedItems().isEmpty()) {
 			Shop shop = gridShops.getSelectedItems().toArray(new Shop[1])[0];
 			shopService.delete(shop);

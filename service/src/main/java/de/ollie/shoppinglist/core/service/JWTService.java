@@ -11,6 +11,13 @@ import lombok.experimental.Accessors;
 
 public interface JWTService {
 
+	static final String CLAIM_NAME_APPLICATION_NAME = "applicationName";
+	static final String CLAIM_NAME_APPLICATION_RIGHTS = "applicationRights";
+	static final String CLAIM_NAME_LOGIN_DATE = "loginDate";
+	static final String CLAIM_NAME_USER_GLOBAL_ID = "userGlobalId";
+	static final String CLAIM_NAME_USER_NAME = "userName";
+	static final String CLAIM_NAME_USER_TOKEN = "userToken";
+
 	@Accessors(chain = true)
 	@AllArgsConstructor
 	@EqualsAndHashCode
@@ -27,6 +34,6 @@ public interface JWTService {
 
 	AuthorizationData getAuthorizationData(String jwt);
 
-	LocalDateTime getEndOfValidity(String jwt);
+	LocalDateTime getLoginDate(String jwt);
 
 }

@@ -118,6 +118,7 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 	}
 
 	private void editItem() {
+		sessionData.getAccessChecker().checkToken();
 		if (!gridItems.getSelectedItems().isEmpty()) {
 			Item item = gridItems.getSelectedItems().toArray(new Item[1])[0];
 			new ItemDetailsDialog(item, event -> saveItem(item), resourceManager, sessionData, shopService).open();
@@ -125,17 +126,20 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 	}
 
 	private void newItem() {
+		sessionData.getAccessChecker().checkToken();
 		Item item = new Item().setName("").setUser(sessionData.getAuthorizationData().getUser().getId());
 		new ItemDetailsDialog(item, event -> saveItem(item), resourceManager, sessionData, shopService).open();
 	}
 
 	private void saveItem(Item item) {
+		sessionData.getAccessChecker().checkToken();
 		itemService.update(item);
 		eventManager.fireShoppingListEvent(new ItemShoppingListEvent(ActionType.ADD, item));
 		updateGridItems();
 	}
 
 	private void removeItem() {
+		sessionData.getAccessChecker().checkToken();
 		if (!gridItems.getSelectedItems().isEmpty()) {
 			Item item = gridItems.getSelectedItems().toArray(new Item[1])[0];
 			itemService.delete(item);

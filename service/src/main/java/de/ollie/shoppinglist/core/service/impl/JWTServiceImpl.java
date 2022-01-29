@@ -51,23 +51,27 @@ public class JWTServiceImpl implements JWTService {
 	}
 
 	private void ensureJWTContainsDataForAllField(DecodedJWT decodedJWT) {
-		ensure(decodedJWT.getClaims().get("applicationName") != null, new JWTNotValidException());
-		ensure(decodedJWT.getClaims().get("applicationRights") != null, new JWTNotValidException());
-		ensure(decodedJWT.getClaims().get("endOfValidity") != null, new JWTNotValidException());
-		ensure(decodedJWT.getClaims().get("userGlobalId") != null, new JWTNotValidException());
-		ensure(decodedJWT.getClaims().get("userName") != null, new JWTNotValidException());
-		ensure(decodedJWT.getClaims().get("userToken") != null, new JWTNotValidException());
+		ensure(decodedJWT.getClaims().get(CLAIM_NAME_APPLICATION_NAME) != null, new JWTNotValidException());
+		ensure(decodedJWT.getClaims().get(CLAIM_NAME_APPLICATION_RIGHTS) != null, new JWTNotValidException());
+		ensure(decodedJWT.getClaims().get(CLAIM_NAME_LOGIN_DATE) != null, new JWTNotValidException());
+		ensure(decodedJWT.getClaims().get(CLAIM_NAME_USER_GLOBAL_ID) != null, new JWTNotValidException());
+		ensure(decodedJWT.getClaims().get(CLAIM_NAME_USER_NAME) != null, new JWTNotValidException());
+		ensure(decodedJWT.getClaims().get(CLAIM_NAME_USER_TOKEN) != null, new JWTNotValidException());
 	}
 
 	private void ensureEndOfValidityIsInRange(DecodedJWT decodedJWT) {
 		if (!configuration.isTestMode()) {
-			LocalDateTime endOfValidity = getLocalDateTime(decodedJWT.getClaims().get("endOfValidity").asString());
+			LocalDateTime loginDate = getLoginDate(decodedJWT);
 			ensure(
-					!endOfValidity.minusMinutes(configuration.getBaseValidityInMinutes()).isAfter(LocalDateTime.now()),
+					!loginDate.minusMinutes(configuration.getBaseValidityInMinutes()).isAfter(LocalDateTime.now()),
 					new JWTNotValidException());
 		} else {
 			LOGGER.info("token end of validtity ignored by test mode!");
 		}
+	}
+
+	private LocalDateTime getLoginDate(DecodedJWT decodedJWT) {
+		return getLocalDateTime(decodedJWT.getClaims().get(CLAIM_NAME_LOGIN_DATE).asString());
 	}
 
 	private LocalDateTime getLocalDateTime(String s) {
@@ -76,18 +80,22 @@ public class JWTServiceImpl implements JWTService {
 	}
 
 	private AuthorizationData createAuthorizationData(DecodedJWT decodedJWT) {
-		LocalDateTime endOfValidity = getLocalDateTime(decodedJWT.getClaims().get("endOfValidity").asString());
+		LocalDateTime loginDate = getLoginDate(decodedJWT);
 		return new AuthorizationData(
-				decodedJWT.getClaims().get("applicationName").asString(),
-				endOfValidity,
+				decodedJWT.getClaims().get(CLAIM_NAME_APPLICATION_NAME).asString(),
+				loginDate,
 				findByGlobalIdOrCreate(decodedJWT),
-				decodedJWT.getClaims().get("applicationRights").asArray(String.class));
+				decodedJWT.getClaims().get(CLAIM_NAME_APPLICATION_RIGHTS).asArray(String.class));
 	}
 
 	private User findByGlobalIdOrCreate(DecodedJWT decodedJWT) {
 		return userService
-				.findByGlobalId(decodedJWT.getClaims().get("userGlobalId").asString())
+				.findByGlobalId(getUserGlobalId(decodedJWT))
 				.orElseGet(() -> createUser(decodedJWT));
+	}
+
+	private String getUserGlobalId(DecodedJWT decodedJWT) {
+		return decodedJWT.getClaims().get(CLAIM_NAME_USER_GLOBAL_ID).asString();
 	}
 
 	private User createUser(DecodedJWT decodedJWT) {
@@ -96,14 +104,15 @@ public class JWTServiceImpl implements JWTService {
 						userService
 								.create(
 										new User()
-												.setGlobalId(decodedJWT.getClaims().get("userGlobalId").asString())
-												.setName(decodedJWT.getClaims().get("userName").asString())
-												.setToken(decodedJWT.getClaims().get("userToken").asString())));
+												.setGlobalId(getUserGlobalId(decodedJWT))
+												.setName(decodedJWT.getClaims().get(CLAIM_NAME_USER_NAME).asString())
+												.setToken(
+														decodedJWT.getClaims().get(CLAIM_NAME_USER_TOKEN).asString())));
 	}
 
 	@Override
-	public LocalDateTime getEndOfValidity(String jwt) {
-		return getLocalDateTime(decodeJWT(jwt).getClaims().get("endOfValidity").asString());
+	public LocalDateTime getLoginDate(String jwt) {
+		return getLocalDateTime(decodeJWT(jwt).getClaims().get(CLAIM_NAME_LOGIN_DATE).asString());
 	}
 
 }

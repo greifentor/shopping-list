@@ -42,20 +42,18 @@ public class ShoppingListMainLayout extends VerticalLayout implements ShoppingLi
 		this.listPositionService = listPositionService;
 		this.resourceManager = resourceManager;
 		this.sessionData = sessionData;
-		VerticalLayout layout = new VerticalLayout();
-		layout.setWidthFull();
-		layout.getStyle().set("-moz-border-radius", "4px");
-		layout.getStyle().set("-webkit-border-radius", "4px");
-		layout.getStyle().set("border-radius", "4px");
-		layout.getStyle().set("border", "1px solid gray");
-		layout
-				.getStyle()
+		setWidthFull();
+		getStyle().set("-moz-border-radius", "4px");
+		getStyle().set("-webkit-border-radius", "4px");
+		getStyle().set("border-radius", "4px");
+		getStyle().set("border", "1px solid gray");
+		getStyle()
 				.set(
 						"box-shadow",
 						"10px 10px 20px #e4e4e4, -10px 10px 20px #e4e4e4, -10px -10px 20px #e4e4e4, 10px -10px 20px #e4e4e4");
-
 		accordion = new Accordion();
 		accordion.setWidthFull();
+		accordion.addOpenedChangeListener(event -> sessionData.getAccessChecker().checkToken());
 		shopService
 				.findAll()
 				.stream()
@@ -82,8 +80,7 @@ public class ShoppingListMainLayout extends VerticalLayout implements ShoppingLi
 										shopService,
 								eventManager));
 		updateAccordion();
-		layout.add(accordion);
-		add(layout);
+		add(accordion);
 		eventManager.addShoppingListEventListener(this);
 	}
 

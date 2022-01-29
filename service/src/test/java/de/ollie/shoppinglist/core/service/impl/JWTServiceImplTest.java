@@ -21,6 +21,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 
 import de.ollie.shoppinglist.core.model.User;
+import de.ollie.shoppinglist.core.service.JWTService;
 import de.ollie.shoppinglist.core.service.JWTService.AuthorizationData;
 import de.ollie.shoppinglist.core.service.UserService;
 import de.ollie.shoppinglist.core.service.exception.JWTNotValidException;
@@ -36,7 +37,7 @@ class JWTServiceImplTest {
 
 	private static final String APPLICATION_NAME = "application-name";
 	private static final String[] APPLICATION_RIGHTS = new String[] { RIGHT_1, RIGHT_2 };
-	private static final LocalDateTime END_OF_VALIDITY =
+	private static final LocalDateTime LOGIN_DATE =
 			LocalDateTime.now().plusMinutes(BASE_VALIDITY_IN_MINUTES).withNano(0);
 	private static final String USER_GLOBAL_ID = "TEST-USER";
 	private static final String USER_NAME = "T.User";
@@ -71,7 +72,7 @@ class JWTServiceImplTest {
 				assertThrows(
 						JWTNotValidException.class,
 						() -> unitUnderTest
-								.getAuthorizationData(createJWT(USER_NAME, null, END_OF_VALIDITY, APPLICATION_RIGHTS)));
+								.getAuthorizationData(createJWT(USER_NAME, null, LOGIN_DATE, APPLICATION_RIGHTS)));
 			}
 
 			@Test
@@ -82,11 +83,11 @@ class JWTServiceImplTest {
 				assertThrows(
 						JWTNotValidException.class,
 						() -> unitUnderTest
-								.getAuthorizationData(createJWT(USER_NAME, APPLICATION_NAME, END_OF_VALIDITY, null)));
+								.getAuthorizationData(createJWT(USER_NAME, APPLICATION_NAME, LOGIN_DATE, null)));
 			}
 
 			@Test
-			void passAJWTWithoutAnEndOfValidity_throwsAnException() {
+			void passAJWTWithoutAnLoginDate_throwsAnException() {
 				// Prepare
 				when(configuration.getSecret()).thenReturn(SECRET);
 				// Run & Check
@@ -106,7 +107,7 @@ class JWTServiceImplTest {
 						JWTNotValidException.class,
 						() -> unitUnderTest
 								.getAuthorizationData(
-										createJWT(null, APPLICATION_NAME, END_OF_VALIDITY, APPLICATION_RIGHTS)));
+										createJWT(null, APPLICATION_NAME, LOGIN_DATE, APPLICATION_RIGHTS)));
 			}
 
 			@Test
@@ -121,7 +122,7 @@ class JWTServiceImplTest {
 										createJWT(
 												USER_NAME,
 												APPLICATION_NAME,
-												END_OF_VALIDITY,
+												LOGIN_DATE,
 												APPLICATION_RIGHTS,
 												SECRET + ";op")));
 			}
@@ -139,7 +140,7 @@ class JWTServiceImplTest {
 										createJWT(
 												USER_NAME,
 												APPLICATION_NAME,
-												END_OF_VALIDITY.plusMinutes(1),
+												LOGIN_DATE.plusMinutes(1),
 												APPLICATION_RIGHTS)));
 			}
 
@@ -152,7 +153,7 @@ class JWTServiceImplTest {
 			void passAValidJWT_returnsACorrectAuthorizationData() {
 				// Prepare
 				AuthorizationData expected =
-						new AuthorizationData(APPLICATION_NAME, END_OF_VALIDITY, USER, APPLICATION_RIGHTS);
+						new AuthorizationData(APPLICATION_NAME, LOGIN_DATE, USER, APPLICATION_RIGHTS);
 				String jwt = createFullyLoadedJWT();
 				when(configuration.getBaseValidityInMinutes()).thenReturn(BASE_VALIDITY_IN_MINUTES);
 				when(configuration.getSecret()).thenReturn(SECRET);
@@ -168,45 +169,42 @@ class JWTServiceImplTest {
 	}
 
 	@Nested
-	class TestsOfMethod_getEndOfvalidity_String {
+	class TestsOfMethod_getLoginDate_String {
 
 		@Test
-		void passAJWTWithoutAnEndOfValidity_throwsAnException() {
-			// Prepare
-			when(configuration.getSecret()).thenReturn(SECRET);
-			// Run & Check
+		void passAJWTWithoutAnLoginDate_throwsAnException() {
 			assertEquals(
-					END_OF_VALIDITY,
+					LOGIN_DATE,
 					unitUnderTest
-							.getEndOfValidity(
-									createJWT(USER_NAME, APPLICATION_NAME, END_OF_VALIDITY, APPLICATION_RIGHTS)));
+							.getLoginDate(
+									createJWT(USER_NAME, APPLICATION_NAME, LOGIN_DATE, APPLICATION_RIGHTS)));
 		}
 
 	}
 
 	private static String createFullyLoadedJWT() {
-		return createJWT(USER_NAME, APPLICATION_NAME, END_OF_VALIDITY, APPLICATION_RIGHTS);
+		return createJWT(USER_NAME, APPLICATION_NAME, LOGIN_DATE, APPLICATION_RIGHTS);
 	}
 
-	private static String createJWT(String userName, String applicationName, LocalDateTime endOfValidity,
+	private static String createJWT(String userName, String applicationName, LocalDateTime loginDate,
 			String[] applicationRights, String... secrets) {
 		Algorithm algorithm = Algorithm.HMAC512(secrets.length > 0 ? secrets[0] : SECRET);
 		Builder builder = JWT.create();
 		if (applicationName != null) {
-			builder.withClaim("applicationName", applicationName);
+			builder.withClaim(JWTService.CLAIM_NAME_APPLICATION_NAME, applicationName);
 		}
 		if (applicationRights != null) {
-			builder.withArrayClaim("applicationRights", applicationRights);
+			builder.withArrayClaim(JWTService.CLAIM_NAME_APPLICATION_RIGHTS, applicationRights);
 		}
-		if (endOfValidity != null) {
+		if (loginDate != null) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			builder.withClaim("endOfValidity", endOfValidity.format(formatter));
+			builder.withClaim(JWTService.CLAIM_NAME_LOGIN_DATE, loginDate.format(formatter));
 		}
 		if (userName != null) {
-			builder.withClaim("userName", userName);
+			builder.withClaim(JWTService.CLAIM_NAME_USER_NAME, userName);
 		}
-		builder.withClaim("userGlobalId", USER_GLOBAL_ID);
-		builder.withClaim("userToken", USER_TOKEN);
+		builder.withClaim(JWTService.CLAIM_NAME_USER_GLOBAL_ID, USER_GLOBAL_ID);
+		builder.withClaim(JWTService.CLAIM_NAME_USER_TOKEN, USER_TOKEN);
 		return builder.sign(algorithm);
 	}
 

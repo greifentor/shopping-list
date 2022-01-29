@@ -102,7 +102,6 @@ public class ApplicationStartLayout extends VerticalLayout implements AccessChec
 		logger.info("starting shopping-list application ...");
 		removeAll();
 		getStyle().set("background-image", "url(ShoppingList-Background.png)");
-		setHeight("632px");
 		setMargin(false);
 		setWidthFull();
 		buttonBackToCube =
@@ -119,7 +118,7 @@ public class ApplicationStartLayout extends VerticalLayout implements AccessChec
 						resourceManager
 								.getLocalizedString("ApplicationStartLayout.headerLayout.label.text", LOCALIZATION)
 								+ " (" + webAppConfiguration.getAppVersion() + ")",
-						HeaderLayoutMode.WRAPPED);
+						HeaderLayoutMode.PLAIN);
 		if (authorizationData == null) {
 			denyAccess();
 		} else {
@@ -137,12 +136,24 @@ public class ApplicationStartLayout extends VerticalLayout implements AccessChec
 	@Override
 	public boolean checkToken() {
 		if (jwtService
-				.getEndOfValidity(token)
+				.getLoginDate(token)
 				.plusMinutes(webAppConfiguration.getMaximumJWTValidityInMinutes())
 				.isBefore(LocalDateTime.now())) {
+			logger
+					.info(
+							"session invalid: "
+									+ jwtService
+											.getLoginDate(token)
+											.plusMinutes(webAppConfiguration.getMaximumJWTValidityInMinutes())
+									+ " < " + LocalDateTime.now());
 			denyAccess();
 			return false;
 		}
+		logger
+				.info(
+						"valid until: " + jwtService
+								.getLoginDate(token)
+								.plusMinutes(webAppConfiguration.getMaximumJWTValidityInMinutes()));
 		return true;
 	}
 
@@ -154,6 +165,7 @@ public class ApplicationStartLayout extends VerticalLayout implements AccessChec
 		layout.setMargin(true);
 		layout.add(label);
 		add(layout);
+		logger.info("access denied!");
 	}
 
 	private void switchToCube() {

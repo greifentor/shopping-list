@@ -34,6 +34,12 @@ public class ItemDetailsDialog extends Dialog {
 		comboBoxShops.setWidthFull();
 		comboBoxShops.setItemLabelGenerator(shop -> shop.getName());
 		comboBoxShops
+				.setLabel(
+						resourceManager
+								.getLocalizedString(
+										"ItemDetailsDialog.comboBoxShops.label",
+										sessionData.getLocalization()));
+		comboBoxShops
 				.setItems(
 						shopService
 								.findAll()
