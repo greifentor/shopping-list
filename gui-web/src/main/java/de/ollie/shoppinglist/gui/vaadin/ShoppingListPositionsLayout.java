@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import de.ollie.shoppinglist.core.model.Item;
 import de.ollie.shoppinglist.core.model.ListPosition;
 import de.ollie.shoppinglist.core.model.Shop;
+import de.ollie.shoppinglist.core.model.User;
 import de.ollie.shoppinglist.core.service.ItemService;
 import de.ollie.shoppinglist.core.service.ListPositionService;
 import de.ollie.shoppinglist.core.service.localization.ResourceManager;
@@ -56,6 +57,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 												"ShoppingListPositionsLayout.button.addposition.label",
 												sessionData.getLocalization()),
 								event -> addListPosition());
+		buttonAddPosition.setWidthFull();
 		comboBoxItems = new ComboBox<>();
 		comboBoxItems.setWidthFull();
 		comboBoxItems.setAllowCustomValue(true);
@@ -85,8 +87,8 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 		logger.info("attached");
 	}
 
-	private String getItemName(long id) {
-		return itemService.findById(id).map(Item::getName).orElse("-");
+	private String getItemName(Item item) {
+		return item != null ? item.getName() : "-";
 	}
 
 	private void updateComboBoxItem() {
@@ -98,11 +100,11 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 									.stream()
 									.filter(
 											item -> (item.getUser() != null)
-													|| (item.getUser().longValue() == sessionData
+													|| (item.getUser().getId() == sessionData
 															.getAuthorizationData()
 															.getUser()
 															.getId()))
-									.filter(item -> (item.getShop() == shop.getId()))
+									.filter(item -> (item.getShop().getId() == shop.getId()))
 									.sorted((i0, i1) -> i0.getName().compareTo(i1.getName())));
 		}
 	}
@@ -112,9 +114,9 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 		if (comboBoxItems.getValue() != null) {
 			ListPosition newListPosition =
 					new ListPosition()
-							.setItem(comboBoxItems.getValue().getId())
-							.setShop(shop.getId())
-							.setUser(sessionData.getAuthorizationData().getUser().getId());
+							.setItem(comboBoxItems.getValue())
+							.setShop(shop)
+							.setUser(sessionData.getAuthorizationData().getUser());
 			listPositionService.create(newListPosition);
 			updateGridListPositions();
 			eventManager.fireShoppingListEvent(new ListPositionShoppingListEvent(ActionType.ADD, newListPosition));
@@ -128,7 +130,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 				listPositionService.delete(lp);
 			updateGridListPositions();
 				eventManager.fireShoppingListEvent(new ListPositionShoppingListEvent(ActionType.REMOVE, lp));
-			}, itemService, resourceManager, sessionData).open();
+			}, resourceManager, sessionData).open();
 		}
 	}
 
@@ -145,20 +147,23 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 		}
 	}
 
-	private int getSortOrder(long id) {
-		return itemService.findById(id).map(item -> item.getSortOrder()).orElse(0);
+	private int getSortOrder(Item item) {
+		return item != null ? item.getSortOrder() : 0;
 	}
 
 	private boolean matchesToShopAndUser(ListPosition listPosition) {
 		return isShopMatching(listPosition.getShop()) && isUserMatching(listPosition.getUser());
 	}
 
-	private boolean isShopMatching(Long shopId) {
-		return (shopId != null) && (shop.getId() == shopId);
+	private boolean isShopMatching(Shop listPositionShop) {
+		return (shop != null) && (shop.getId() == (listPositionShop != null ? listPositionShop.getId() : -1));
 	}
 
-	private boolean isUserMatching(long userId) {
-		return userId == sessionData.getAuthorizationData().getUser().getId();
+	private boolean isUserMatching(User listPositionUser) {
+		return (listPositionUser != null ? listPositionUser.getId() : -1) == sessionData
+				.getAuthorizationData()
+				.getUser()
+				.getId();
 	}
 
 	@Override

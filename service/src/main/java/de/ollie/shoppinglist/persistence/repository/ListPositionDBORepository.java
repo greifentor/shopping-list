@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
+import de.ollie.shoppinglist.persistence.entity.ShopDBO;
 
 /**
  * A JPA repository for list_positions.
@@ -13,8 +14,8 @@ import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
 @Repository
 public interface ListPositionDBORepository extends JpaRepository<ListPositionDBO, Long> {
 
-	long countByShop(long shopId);
+	long countByShop(ShopDBO shop);
 
-	List<ListPositionDBO> findAllByShop(long shopId);
+	List<ListPositionDBO> findAllByShop(ShopDBO shop);
 
 }

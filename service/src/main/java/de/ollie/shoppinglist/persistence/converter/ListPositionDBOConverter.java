@@ -5,10 +5,10 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
-import lombok.Generated;
-
-import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
 import de.ollie.shoppinglist.core.model.ListPosition;
+import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
 
 /**
  * A DBO converter for list_positions.
@@ -17,7 +17,12 @@ import de.ollie.shoppinglist.core.model.ListPosition;
  */
 @Generated
 @Named
+@RequiredArgsConstructor
 public class ListPositionDBOConverter implements ToModelConverter<ListPosition, ListPositionDBO> {
+
+	private final ItemDBOConverter itemDBOConverter;
+	private final ShopDBOConverter shopDBOConverter;
+	private final UserDBOConverter userDBOConverter;
 
 	public ListPositionDBO toDBO(ListPosition model) {
 		if (model == null) {
@@ -25,9 +30,9 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 		}
 		return new ListPositionDBO()
 				.setId(model.getId())
-				.setItem(model.getItem())
-				.setShop(model.getShop())
-				.setUser(model.getUser());
+				.setItem(itemDBOConverter.toDBO(model.getItem()))
+				.setShop(shopDBOConverter.toDBO(model.getShop()))
+				.setUser(userDBOConverter.toDBO(model.getUser()));
 	}
 
 	@Override
@@ -37,9 +42,9 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 		}
 		return new ListPosition()
 				.setId(dbo.getId())
-				.setItem(dbo.getItem())
-				.setShop(dbo.getShop())
-				.setUser(dbo.getUser());
+				.setItem(itemDBOConverter.toModel(dbo.getItem()))
+				.setShop(shopDBOConverter.toModel(dbo.getShop()))
+				.setUser(userDBOConverter.toModel(dbo.getUser()));
 	}
 
 	@Override

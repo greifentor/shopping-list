@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 public class Shop {
 
 	private long id;
-	private Long user;
+	private User user;
 	private String name;
 	private int sortOrder;
 

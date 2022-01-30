@@ -70,6 +70,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 												"ShopMaintainceLayout.buttonEdit.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> editShop());
+		buttonEdit.setWidthFull();
 		buttonNew =
 				ButtonFactory
 						.createButton(
@@ -78,6 +79,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 												"ShopMaintainceLayout.buttonNew.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> newShop());
+		buttonNew.setWidthFull();
 		buttonRemove =
 				ButtonFactory
 						.createButton(
@@ -86,6 +88,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 												"ShopMaintainceLayout.buttonRemove.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> removeShop());
+		buttonRemove.setWidthFull();
 		layout.add(buttonNew, buttonEdit, new Label(""), buttonRemove);
 		return layout;
 	}
@@ -112,7 +115,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 
 	private void newShop() {
 		sessionData.getAccessChecker().checkToken();
-		Shop shop = new Shop().setName("").setUser(sessionData.getAuthorizationData().getUser().getId());
+		Shop shop = new Shop().setName("").setUser(sessionData.getAuthorizationData().getUser());
 		new ShopDetailsDialog(shop, event -> saveShop(shop), resourceManager, sessionData).open();
 	}
 

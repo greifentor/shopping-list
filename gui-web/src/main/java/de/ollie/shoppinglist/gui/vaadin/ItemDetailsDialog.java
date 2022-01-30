@@ -46,7 +46,7 @@ public class ItemDetailsDialog extends Dialog {
 								.stream()
 								.sorted((i0, i1) -> i0.getName().compareTo(i1.getName()))
 								.collect(Collectors.toList()));
-		comboBoxShops.setValue(shopService.findById(item.getShop()).orElse(null));
+		comboBoxShops.setValue(item.getShop());
 		textFieldName =
 				new TextField(
 						resourceManager
@@ -83,7 +83,7 @@ public class ItemDetailsDialog extends Dialog {
 	private void submitItem(Item item, ItemDetailsDialogObserver observer) {
 		item.setName(textFieldName.getValue());
 		item.setSortOrder(numberFieldSortOrder.getValue().intValue());
-		item.setShop(comboBoxShops.getValue().getId());
+		item.setShop(comboBoxShops.getValue());
 		close();
 		observer.itemChanged(item);
 	}

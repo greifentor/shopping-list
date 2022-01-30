@@ -57,7 +57,7 @@ public class ShoppingListMainLayout extends VerticalLayout implements ShoppingLi
 		shopService
 				.findAll()
 				.stream()
-				.filter(shop -> shop.getUser().equals(sessionData.getAuthorizationData().getUser().getId()))
+				.filter(shop -> shop.getUser().getId() == sessionData.getAuthorizationData().getUser().getId())
 				.sorted((s0, s1) -> s0.getSortOrder() - s1.getSortOrder())
 				.forEach(shop -> shopAccordionPanels.add(createShopAccordionPanel(shop)));
 		accordionPanelShop =
