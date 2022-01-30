@@ -15,8 +15,8 @@ import lombok.experimental.Accessors;
 public class ListPosition {
 
 	private long id;
-	private long item;
-	private long shop;
-	private long user;
+	private Item item;
+	private Shop shop;
+	private User user;
 
 }

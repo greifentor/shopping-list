@@ -7,9 +7,6 @@ import javax.inject.Named;
 
 import de.ollie.shoppinglist.core.model.ListPosition;
 import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
-import de.ollie.shoppinglist.persistence.repository.ItemDBORepository;
-import de.ollie.shoppinglist.persistence.repository.ShopDBORepository;
-import de.ollie.shoppinglist.persistence.repository.UserDBORepository;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -23,9 +20,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ListPositionDBOConverter implements ToModelConverter<ListPosition, ListPositionDBO> {
 
-	private final ItemDBORepository itemDBORepository;
-	private final ShopDBORepository shopDBORepository;
-	private final UserDBORepository userDBORepository;
+	private final ItemDBOConverter itemDBOConverter;
+	private final ShopDBOConverter shopDBOConverter;
+	private final UserDBOConverter userDBOConverter;
 
 	public ListPositionDBO toDBO(ListPosition model) {
 		if (model == null) {
@@ -33,9 +30,9 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 		}
 		return new ListPositionDBO()
 				.setId(model.getId())
-				.setItem((model.getItem() < 1 ? null : itemDBORepository.findById(model.getItem()).orElse(null)))
-				.setShop((model.getShop() < 1 ? null : shopDBORepository.findById(model.getShop()).orElse(null)))
-				.setUser((model.getUser() < 1 ? null : userDBORepository.findById(model.getUser()).orElse(null)));
+				.setItem(itemDBOConverter.toDBO(model.getItem()))
+				.setShop(shopDBOConverter.toDBO(model.getShop()))
+				.setUser(userDBOConverter.toDBO(model.getUser()));
 	}
 
 	@Override
@@ -45,9 +42,9 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 		}
 		return new ListPosition()
 				.setId(dbo.getId())
-				.setItem((dbo.getItem() == null ? null : dbo.getItem().getId()))
-				.setShop((dbo.getShop() == null ? null : dbo.getShop().getId()))
-				.setUser((dbo.getUser() == null ? null : dbo.getUser().getId()));
+				.setItem(itemDBOConverter.toModel(dbo.getItem()))
+				.setShop(shopDBOConverter.toModel(dbo.getShop()))
+				.setUser(userDBOConverter.toModel(dbo.getUser()));
 	}
 
 	@Override
