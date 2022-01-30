@@ -70,6 +70,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 												"ShopMaintainceLayout.buttonEdit.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> editShop());
+		buttonEdit.setWidthFull();
 		buttonNew =
 				ButtonFactory
 						.createButton(
@@ -78,6 +79,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 												"ShopMaintainceLayout.buttonNew.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> newShop());
+		buttonNew.setWidthFull();
 		buttonRemove =
 				ButtonFactory
 						.createButton(
@@ -86,6 +88,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 												"ShopMaintainceLayout.buttonRemove.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> removeShop());
+		buttonRemove.setWidthFull();
 		layout.add(buttonNew, buttonEdit, new Label(""), buttonRemove);
 		return layout;
 	}

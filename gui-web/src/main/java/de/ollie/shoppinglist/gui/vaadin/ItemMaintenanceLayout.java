@@ -87,6 +87,7 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 												"ItemMaintainceLayout.buttonEdit.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> editItem());
+		buttonEdit.setWidthFull();
 		buttonNew =
 				ButtonFactory
 						.createButton(
@@ -95,6 +96,7 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 												"ItemMaintainceLayout.buttonNew.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> newItem());
+		buttonNew.setWidthFull();
 		buttonRemove =
 				ButtonFactory
 						.createButton(
@@ -103,6 +105,7 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 												"ItemMaintainceLayout.buttonRemove.text",
 												ApplicationStartLayout.LOCALIZATION),
 								event -> removeItem());
+		buttonRemove.setWidthFull();
 		layout.add(buttonNew, buttonEdit, new Label(""), buttonRemove);
 		return layout;
 	}

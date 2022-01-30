@@ -22,13 +22,6 @@ import de.ollie.shoppinglist.gui.vaadin.ApplicationStartLayout;
 public class ButtonFactory {
 
 	public static Button createButton(String text) {
-		Button button =
-				new Button(text)
-						.setBackgroundColor("white")
-						.setBorder("solid 2px")
-						.setBorderColor("yellow")
-						.setColor("black")
-						.setBackgroundImage("gate.png");
 		return createButton(text, null);
 	}
 
@@ -37,9 +30,9 @@ public class ButtonFactory {
 		Button button = new Button(text)
 				.setBackgroundColor("white")
 				.setBorder("solid 2px")
-				.setBorderColor("yellow")
+				.setBorderColor("#c0c0c0")
 				.setColor("black")
-				.setBackgroundImage("gate.png");
+				.setBackgroundColor("gainsboro");
 		if (action != null) {
 			button.addClickListener(action);
 		}

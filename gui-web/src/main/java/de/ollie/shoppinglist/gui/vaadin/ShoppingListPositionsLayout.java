@@ -57,6 +57,7 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 												"ShoppingListPositionsLayout.button.addposition.label",
 												sessionData.getLocalization()),
 								event -> addListPosition());
+		buttonAddPosition.setWidthFull();
 		comboBoxItems = new ComboBox<>();
 		comboBoxItems.setWidthFull();
 		comboBoxItems.setAllowCustomValue(true);
