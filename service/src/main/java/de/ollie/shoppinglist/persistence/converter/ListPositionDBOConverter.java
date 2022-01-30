@@ -5,10 +5,13 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
-import lombok.Generated;
-
-import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
 import de.ollie.shoppinglist.core.model.ListPosition;
+import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
+import de.ollie.shoppinglist.persistence.repository.ItemDBORepository;
+import de.ollie.shoppinglist.persistence.repository.ShopDBORepository;
+import de.ollie.shoppinglist.persistence.repository.UserDBORepository;
+import lombok.Generated;
+import lombok.RequiredArgsConstructor;
 
 /**
  * A DBO converter for list_positions.
@@ -17,7 +20,12 @@ import de.ollie.shoppinglist.core.model.ListPosition;
  */
 @Generated
 @Named
+@RequiredArgsConstructor
 public class ListPositionDBOConverter implements ToModelConverter<ListPosition, ListPositionDBO> {
+
+	private final ItemDBORepository itemDBORepository;
+	private final ShopDBORepository shopDBORepository;
+	private final UserDBORepository userDBORepository;
 
 	public ListPositionDBO toDBO(ListPosition model) {
 		if (model == null) {
@@ -25,9 +33,9 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 		}
 		return new ListPositionDBO()
 				.setId(model.getId())
-				.setItem(model.getItem())
-				.setShop(model.getShop())
-				.setUser(model.getUser());
+				.setItem((model.getItem() < 1 ? null : itemDBORepository.findById(model.getItem()).orElse(null)))
+				.setShop((model.getShop() < 1 ? null : shopDBORepository.findById(model.getShop()).orElse(null)))
+				.setUser((model.getUser() < 1 ? null : userDBORepository.findById(model.getUser()).orElse(null)));
 	}
 
 	@Override
@@ -37,9 +45,9 @@ public class ListPositionDBOConverter implements ToModelConverter<ListPosition, 
 		}
 		return new ListPosition()
 				.setId(dbo.getId())
-				.setItem(dbo.getItem())
-				.setShop(dbo.getShop())
-				.setUser(dbo.getUser());
+				.setItem((dbo.getItem() == null ? null : dbo.getItem().getId()))
+				.setShop((dbo.getShop() == null ? null : dbo.getShop().getId()))
+				.setUser((dbo.getUser() == null ? null : dbo.getUser().getId()));
 	}
 
 	@Override

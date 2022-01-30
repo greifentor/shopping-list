@@ -2,9 +2,12 @@ package de.ollie.shoppinglist.persistence.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -27,10 +30,12 @@ public class ItemDBO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable = false)
 	private long id;
-	@Column(name = "SHOP", nullable = false)
-	private long shop;
-	@Column(name = "USER")
-	private Long user;
+	@JoinColumn(name = "SHOP", referencedColumnName = "ID", nullable = false)
+	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	private ShopDBO shop;
+	@JoinColumn(name = "USER", referencedColumnName = "ID", nullable = false)
+	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	private UserDBO user;
 	@Column(name = "NAME", nullable = false)
 	private String name;
 	@Column(name = "SORT_ORDER", nullable = false)
