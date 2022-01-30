@@ -28,11 +28,10 @@ public class ButtonFactory {
 	public static Button createButton(String text,
 			ComponentEventListener<ClickEvent<com.vaadin.flow.component.button.Button>> action) {
 		Button button = new Button(text)
-				.setBackgroundColor("white")
+				.setBackgroundColor("gainsboro")
 				.setBorder("solid 2px")
 				.setBorderColor("#c0c0c0")
-				.setColor("black")
-				.setBackgroundColor("gainsboro");
+				.setColor("black");
 		if (action != null) {
 			button.addClickListener(action);
 		}
