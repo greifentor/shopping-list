@@ -7,7 +7,6 @@ import javax.inject.Named;
 
 import de.ollie.shoppinglist.core.model.Shop;
 import de.ollie.shoppinglist.persistence.entity.ShopDBO;
-import de.ollie.shoppinglist.persistence.repository.UserDBORepository;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShopDBOConverter implements ToModelConverter<Shop, ShopDBO> {
 
-	private final UserDBORepository userDBORepository;
+	private final UserDBOConverter userDBOConverter;
 
 	public ShopDBO toDBO(Shop model) {
 		if (model == null) {
@@ -29,7 +28,7 @@ public class ShopDBOConverter implements ToModelConverter<Shop, ShopDBO> {
 		}
 		return new ShopDBO()
 				.setId(model.getId())
-				.setUser((model.getUser() == null ? null : userDBORepository.findById(model.getUser()).orElse(null)))
+				.setUser(userDBOConverter.toDBO(model.getUser()))
 				.setName(model.getName())
 				.setSortOrder(model.getSortOrder());
 	}
@@ -41,7 +40,7 @@ public class ShopDBOConverter implements ToModelConverter<Shop, ShopDBO> {
 		}
 		return new Shop()
 				.setId(dbo.getId())
-				.setUser(dbo.getUser() == null ? null : dbo.getUser().getId())
+				.setUser(userDBOConverter.toModel(dbo.getUser()))
 				.setName(dbo.getName())
 				.setSortOrder(dbo.getSortOrder());
 	}

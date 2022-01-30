@@ -112,7 +112,7 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 
 	private void newShop() {
 		sessionData.getAccessChecker().checkToken();
-		Shop shop = new Shop().setName("").setUser(sessionData.getAuthorizationData().getUser().getId());
+		Shop shop = new Shop().setName("").setUser(sessionData.getAuthorizationData().getUser());
 		new ShopDetailsDialog(shop, event -> saveShop(shop), resourceManager, sessionData).open();
 	}
 
