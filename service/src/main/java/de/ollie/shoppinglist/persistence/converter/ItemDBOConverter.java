@@ -7,8 +7,6 @@ import javax.inject.Named;
 
 import de.ollie.shoppinglist.core.model.Item;
 import de.ollie.shoppinglist.persistence.entity.ItemDBO;
-import de.ollie.shoppinglist.persistence.repository.ShopDBORepository;
-import de.ollie.shoppinglist.persistence.repository.UserDBORepository;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
 
@@ -22,8 +20,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ItemDBOConverter implements ToModelConverter<Item, ItemDBO> {
 
-	private final ShopDBORepository shopDBORepository;
-	private final UserDBORepository userDBORepository;
+	private final ShopDBOConverter shopDBOConverter;
+	private final UserDBOConverter userDBOConverter;
 
 	public ItemDBO toDBO(Item model) {
 		if (model == null) {
@@ -31,8 +29,8 @@ public class ItemDBOConverter implements ToModelConverter<Item, ItemDBO> {
 		}
 		return new ItemDBO()
 				.setId(model.getId())
-				.setShop((model.getShop() < 1 ? null : shopDBORepository.findById(model.getShop()).orElse(null)))
-				.setUser((model.getUser() == null ? null : userDBORepository.findById(model.getUser()).orElse(null)))
+				.setShop(shopDBOConverter.toDBO(model.getShop()))
+				.setUser(userDBOConverter.toDBO(model.getUser()))
 				.setName(model.getName())
 				.setSortOrder(model.getSortOrder());
 	}
@@ -44,8 +42,8 @@ public class ItemDBOConverter implements ToModelConverter<Item, ItemDBO> {
 		}
 		return new Item()
 				.setId(dbo.getId())
-				.setShop((dbo.getShop() == null ? null : dbo.getShop().getId()))
-				.setUser((dbo.getUser() == null ? null : dbo.getUser().getId()))
+				.setShop(shopDBOConverter.toModel(dbo.getShop()))
+				.setUser(userDBOConverter.toModel(dbo.getUser()))
 				.setName(dbo.getName())
 				.setSortOrder(dbo.getSortOrder());
 	}

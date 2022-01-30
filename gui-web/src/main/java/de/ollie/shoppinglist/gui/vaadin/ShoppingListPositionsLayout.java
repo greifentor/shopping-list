@@ -98,11 +98,11 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 									.stream()
 									.filter(
 											item -> (item.getUser() != null)
-													|| (item.getUser().longValue() == sessionData
+													|| (item.getUser().getId() == sessionData
 															.getAuthorizationData()
 															.getUser()
 															.getId()))
-									.filter(item -> (item.getShop() == shop.getId()))
+									.filter(item -> (item.getShop().getId() == shop.getId()))
 									.sorted((i0, i1) -> i0.getName().compareTo(i1.getName())));
 		}
 	}

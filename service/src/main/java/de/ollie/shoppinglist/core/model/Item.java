@@ -15,8 +15,8 @@ import lombok.experimental.Accessors;
 public class Item {
 
 	private long id;
-	private long shop;
-	private Long user;
+	private Shop shop;
+	private User user;
 	private String name;
 	private int sortOrder;
 

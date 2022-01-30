@@ -71,8 +71,8 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 		add(createButtonLayout(), gridItems);
 	}
 
-	private String getShopName(long id) {
-		return shopService.findById(id).map(Shop::getName).orElse("n/a");
+	private String getShopName(Shop shop) {
+		return shop != null ? shop.getName() : "n/a";
 	}
 
 	private HorizontalLayout createButtonLayout() {
@@ -127,7 +127,7 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 
 	private void newItem() {
 		sessionData.getAccessChecker().checkToken();
-		Item item = new Item().setName("").setUser(sessionData.getAuthorizationData().getUser().getId());
+		Item item = new Item().setName("").setUser(sessionData.getAuthorizationData().getUser());
 		new ItemDetailsDialog(item, event -> saveItem(item), resourceManager, sessionData, shopService).open();
 	}
 
