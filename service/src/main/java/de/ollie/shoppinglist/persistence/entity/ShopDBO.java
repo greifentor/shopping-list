@@ -30,8 +30,8 @@ public class ShopDBO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable = false)
 	private long id;
-	@JoinColumn(name = "USER", referencedColumnName = "ID", nullable = false)
-	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "USER", nullable = false, referencedColumnName = "ID")
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	private UserDBO user;
 	@Column(name = "NAME", nullable = false)
 	private String name;
