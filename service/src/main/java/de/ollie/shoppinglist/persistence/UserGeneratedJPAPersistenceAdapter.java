@@ -71,4 +71,9 @@ public abstract class UserGeneratedJPAPersistenceAdapter implements UserPersiste
 		repository.deleteById(model.getId());
 	}
 
+	@Override
+	public Optional<User> findByGlobalId(String globalId) {
+		return Optional.ofNullable(converter.toModel(repository.findByGlobalId(globalId).orElse(null)));
+	}
+
 }
