@@ -30,11 +30,11 @@ public class ItemDBO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable = false)
 	private long id;
-	@JoinColumn(name = "SHOP", referencedColumnName = "ID", nullable = false)
-	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "SHOP", nullable = false, referencedColumnName = "ID")
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	private ShopDBO shop;
-	@JoinColumn(name = "USER", referencedColumnName = "ID", nullable = false)
-	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "USER", referencedColumnName = "ID")
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	private UserDBO user;
 	@Column(name = "NAME", nullable = false)
 	private String name;

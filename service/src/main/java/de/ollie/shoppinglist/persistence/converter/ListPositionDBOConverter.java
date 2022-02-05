@@ -5,10 +5,11 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
-import de.ollie.shoppinglist.core.model.ListPosition;
-import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
+import de.ollie.shoppinglist.core.model.ListPosition;
 
 /**
  * A DBO converter for list_positions.

@@ -30,14 +30,14 @@ public class ListPositionDBO {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", nullable = false)
 	private long id;
-	@JoinColumn(name = "ITEM", referencedColumnName = "ID", nullable = false)
-	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "ITEM", nullable = false, referencedColumnName = "ID")
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	private ItemDBO item;
-	@JoinColumn(name = "SHOP", referencedColumnName = "ID", nullable = false)
-	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "SHOP", nullable = false, referencedColumnName = "ID")
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	private ShopDBO shop;
-	@JoinColumn(name = "USER", referencedColumnName = "ID", nullable = false)
-	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	@JoinColumn(name = "USER", nullable = false, referencedColumnName = "ID")
+	@OneToOne(fetch = FetchType.EAGER, optional = false)
 	private UserDBO user;
 
 }

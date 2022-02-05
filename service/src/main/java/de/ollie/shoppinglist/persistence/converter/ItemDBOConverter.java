@@ -5,10 +5,11 @@ import java.util.stream.Collectors;
 
 import javax.inject.Named;
 
-import de.ollie.shoppinglist.core.model.Item;
-import de.ollie.shoppinglist.persistence.entity.ItemDBO;
 import lombok.Generated;
 import lombok.RequiredArgsConstructor;
+
+import de.ollie.shoppinglist.persistence.entity.ItemDBO;
+import de.ollie.shoppinglist.core.model.Item;
 
 /**
  * A DBO converter for items.
