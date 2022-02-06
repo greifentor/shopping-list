@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import de.ollie.shoppinglist.persistence.entity.ItemDBO;
 import lombok.Generated;
+import java.util.List;
+
+import de.ollie.shoppinglist.persistence.entity.UserDBO;
 
 /**
  * A generated JPA repository for items.
@@ -14,4 +17,7 @@ import lombok.Generated;
 @Generated
 @Repository
 public interface ItemGeneratedDBORepository extends JpaRepository<ItemDBO, Long> {
+
+	List<ItemDBO> findAllByUser(UserDBO user);
+
 }

@@ -8,6 +8,8 @@ import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.Shop;
 import lombok.Generated;
 
+import de.ollie.shoppinglist.core.model.User;
+
 /**
  * A generated service interface for Shop management.
  *
@@ -27,5 +29,7 @@ public interface ShopGeneratedService {
 	Shop update(Shop model);
 
 	void delete(Shop model);
+
+	List<Shop> findAllByUser(User user);
 
 }

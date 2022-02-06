@@ -15,7 +15,10 @@ import de.ollie.shoppinglist.persistence.converter.PageParametersToPageableConve
 import de.ollie.shoppinglist.persistence.converter.ShopDBOConverter;
 import de.ollie.shoppinglist.persistence.entity.ShopDBO;
 import de.ollie.shoppinglist.persistence.repository.ShopDBORepository;
+import de.ollie.shoppinglist.persistence.converter.UserDBOConverter;
 import lombok.Generated;
+
+import de.ollie.shoppinglist.core.model.User;
 
 /**
  * A generated JPA persistence adapter for shops.
@@ -29,6 +32,8 @@ public abstract class ShopGeneratedJPAPersistenceAdapter implements ShopPersiste
 	protected ShopDBOConverter converter;
 	@Inject
 	protected ShopDBORepository repository;
+	@Inject
+	protected UserDBOConverter userDBOConverter;
 
 	@Inject
 	protected PageParametersToPageableConverter pageParametersToPageableConverter;
@@ -69,6 +74,11 @@ public abstract class ShopGeneratedJPAPersistenceAdapter implements ShopPersiste
 	@Override
 	public void delete(Shop model) {
 		repository.deleteById(model.getId());
+	}
+
+	@Override
+	public List<Shop> findAllByUser(User user) {
+		return converter.toModel(repository.findAllByUser(userDBOConverter.toDBO(user)));
 	}
 
 }

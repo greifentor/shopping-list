@@ -8,6 +8,8 @@ import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.Item;
 import lombok.Generated;
 
+import de.ollie.shoppinglist.core.model.User;
+
 /**
  * A generated persistence port interface for Item CRUD operations.
  *
@@ -27,5 +29,7 @@ public interface ItemGeneratedPersistencePort {
 	Item update(Item model);
 
 	void delete(Item model);
+
+	List<Item> findAllByUser(User user);
 
 }

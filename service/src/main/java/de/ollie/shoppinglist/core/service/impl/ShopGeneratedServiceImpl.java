@@ -12,6 +12,8 @@ import de.ollie.shoppinglist.core.service.port.persistence.ShopPersistencePort;
 import de.ollie.shoppinglist.core.service.ShopService;
 import lombok.Generated;
 
+import de.ollie.shoppinglist.core.model.User;
+
 /**
  * A generated service interface implementation for Shop management.
  *
@@ -51,6 +53,11 @@ public abstract class ShopGeneratedServiceImpl implements ShopService {
 	@Override
 	public void delete(Shop model) {
 		persistencePort.delete(model);
+	}
+
+	@Override
+	public List<Shop> findAllByUser(User user) {
+		return persistencePort.findAllByUser(user);
 	}
 
 }

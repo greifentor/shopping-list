@@ -15,7 +15,10 @@ import de.ollie.shoppinglist.persistence.converter.PageParametersToPageableConve
 import de.ollie.shoppinglist.persistence.converter.ItemDBOConverter;
 import de.ollie.shoppinglist.persistence.entity.ItemDBO;
 import de.ollie.shoppinglist.persistence.repository.ItemDBORepository;
+import de.ollie.shoppinglist.persistence.converter.UserDBOConverter;
 import lombok.Generated;
+
+import de.ollie.shoppinglist.core.model.User;
 
 /**
  * A generated JPA persistence adapter for items.
@@ -29,6 +32,8 @@ public abstract class ItemGeneratedJPAPersistenceAdapter implements ItemPersiste
 	protected ItemDBOConverter converter;
 	@Inject
 	protected ItemDBORepository repository;
+	@Inject
+	protected UserDBOConverter userDBOConverter;
 
 	@Inject
 	protected PageParametersToPageableConverter pageParametersToPageableConverter;
@@ -69,6 +74,11 @@ public abstract class ItemGeneratedJPAPersistenceAdapter implements ItemPersiste
 	@Override
 	public void delete(Item model) {
 		repository.deleteById(model.getId());
+	}
+
+	@Override
+	public List<Item> findAllByUser(User user) {
+		return converter.toModel(repository.findAllByUser(userDBOConverter.toDBO(user)));
 	}
 
 }

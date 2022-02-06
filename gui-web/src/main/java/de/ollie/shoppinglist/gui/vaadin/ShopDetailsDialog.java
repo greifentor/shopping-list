@@ -36,7 +36,7 @@ public class ShopDetailsDialog extends Dialog {
 				new NumberField(
 						resourceManager
 								.getLocalizedString(
-										"ItemDetailsDialog.textFieldName.label",
+										"ItemDetailsDialog.textFieldSortOrder.label",
 										sessionData.getLocalization()));
 		numberFieldSortOrder.setWidthFull();
 		numberFieldSortOrder.setMax(Integer.MAX_VALUE);

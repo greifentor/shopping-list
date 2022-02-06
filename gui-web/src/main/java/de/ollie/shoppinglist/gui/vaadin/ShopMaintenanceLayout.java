@@ -1,7 +1,5 @@
 package de.ollie.shoppinglist.gui.vaadin;
 
-import java.util.stream.Collectors;
-
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -98,10 +96,9 @@ public class ShopMaintenanceLayout extends VerticalLayout {
 			gridShops
 					.setItems(
 							shopService
-									.findAll()
+									.findAllByUser(sessionData.getAuthorizationData().getUser())
 									.stream()
-									.sorted((s0, s1) -> s0.getName().compareTo(s1.getName()))
-									.collect(Collectors.toList()));
+									.sorted((s0, s1) -> s0.getName().compareTo(s1.getName())));
 		}
 	}
 

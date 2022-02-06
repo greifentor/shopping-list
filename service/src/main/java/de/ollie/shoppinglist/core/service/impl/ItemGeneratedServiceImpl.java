@@ -12,6 +12,8 @@ import de.ollie.shoppinglist.core.service.port.persistence.ItemPersistencePort;
 import de.ollie.shoppinglist.core.service.ItemService;
 import lombok.Generated;
 
+import de.ollie.shoppinglist.core.model.User;
+
 /**
  * A generated service interface implementation for Item management.
  *
@@ -51,6 +53,11 @@ public abstract class ItemGeneratedServiceImpl implements ItemService {
 	@Override
 	public void delete(Item model) {
 		persistencePort.delete(model);
+	}
+
+	@Override
+	public List<Item> findAllByUser(User user) {
+		return persistencePort.findAllByUser(user);
 	}
 
 }
