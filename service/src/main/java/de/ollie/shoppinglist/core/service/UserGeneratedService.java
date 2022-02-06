@@ -28,4 +28,6 @@ public interface UserGeneratedService {
 
 	void delete(User model);
 
+	Optional<User> findByGlobalId(String globalId);
+
 }

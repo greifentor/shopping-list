@@ -14,7 +14,7 @@ import java.util.Optional;
  */
 @Generated
 @Repository
-public interface GeneratedUserDBORepository extends JpaRepository<UserDBO, Long> {
+public interface UserGeneratedDBORepository extends JpaRepository<UserDBO, Long> {
 
 	Optional<UserDBO> findByGlobalId(String globalId);
 

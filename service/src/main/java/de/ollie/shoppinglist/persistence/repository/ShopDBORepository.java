@@ -1,4 +1,4 @@
 package de.ollie.shoppinglist.persistence.repository;
 
-public interface ShopDBORepository extends GeneratedShopDBORepository {
+public interface ShopDBORepository extends ShopGeneratedDBORepository {
 }

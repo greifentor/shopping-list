@@ -6,13 +6,15 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import de.ollie.shoppinglist.core.model.ListPosition;
 import de.ollie.shoppinglist.core.model.Page;
 import de.ollie.shoppinglist.core.model.PageParameters;
-import de.ollie.shoppinglist.core.model.ListPosition;
+import de.ollie.shoppinglist.core.model.Shop;
 import de.ollie.shoppinglist.core.service.port.persistence.ListPositionPersistencePort;
+import de.ollie.shoppinglist.persistence.converter.ListPositionDBOConverter;
 import de.ollie.shoppinglist.persistence.converter.PageConverter;
 import de.ollie.shoppinglist.persistence.converter.PageParametersToPageableConverter;
-import de.ollie.shoppinglist.persistence.converter.ListPositionDBOConverter;
+import de.ollie.shoppinglist.persistence.converter.ShopDBOConverter;
 import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
 import de.ollie.shoppinglist.persistence.repository.ListPositionDBORepository;
 import lombok.Generated;
@@ -29,6 +31,8 @@ public abstract class ListPositionGeneratedJPAPersistenceAdapter implements List
 	protected ListPositionDBOConverter converter;
 	@Inject
 	protected ListPositionDBORepository repository;
+	@Inject
+	protected ShopDBOConverter shopConverter;
 
 	@Inject
 	protected PageParametersToPageableConverter pageParametersToPageableConverter;
@@ -69,6 +73,11 @@ public abstract class ListPositionGeneratedJPAPersistenceAdapter implements List
 	@Override
 	public void delete(ListPosition model) {
 		repository.deleteById(model.getId());
+	}
+
+	@Override
+	public List<ListPosition> findAllByShop(Shop shop) {
+		return converter.toModel(repository.findAllByShop(shopConverter.toDBO(shop)));
 	}
 
 }

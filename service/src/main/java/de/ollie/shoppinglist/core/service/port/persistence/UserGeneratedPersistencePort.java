@@ -28,4 +28,6 @@ public interface UserGeneratedPersistencePort {
 
 	void delete(User model);
 
+	Optional<User> findByGlobalId(String globalId);
+
 }

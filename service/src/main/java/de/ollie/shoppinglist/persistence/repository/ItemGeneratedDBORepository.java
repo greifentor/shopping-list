@@ -13,5 +13,5 @@ import lombok.Generated;
  */
 @Generated
 @Repository
-public interface GeneratedItemDBORepository extends JpaRepository<ItemDBO, Long> {
+public interface ItemGeneratedDBORepository extends JpaRepository<ItemDBO, Long> {
 }

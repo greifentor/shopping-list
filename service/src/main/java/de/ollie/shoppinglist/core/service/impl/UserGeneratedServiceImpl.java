@@ -53,4 +53,9 @@ public abstract class UserGeneratedServiceImpl implements UserService {
 		persistencePort.delete(model);
 	}
 
+	@Override
+	public Optional<User> findByGlobalId(String globalId) {
+		return persistencePort.findByGlobalId(globalId);
+	}
+
 }

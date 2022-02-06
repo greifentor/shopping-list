@@ -8,6 +8,8 @@ import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.ListPosition;
 import lombok.Generated;
 
+import de.ollie.shoppinglist.core.model.Shop;
+
 /**
  * A generated service interface for ListPosition management.
  *
@@ -27,5 +29,7 @@ public interface ListPositionGeneratedService {
 	ListPosition update(ListPosition model);
 
 	void delete(ListPosition model);
+
+	List<ListPosition> findAllByShop(Shop shop);
 
 }

@@ -12,6 +12,8 @@ import de.ollie.shoppinglist.core.service.port.persistence.ListPositionPersisten
 import de.ollie.shoppinglist.core.service.ListPositionService;
 import lombok.Generated;
 
+import de.ollie.shoppinglist.core.model.Shop;
+
 /**
  * A generated service interface implementation for ListPosition management.
  *
@@ -51,6 +53,11 @@ public abstract class ListPositionGeneratedServiceImpl implements ListPositionSe
 	@Override
 	public void delete(ListPosition model) {
 		persistencePort.delete(model);
+	}
+
+	@Override
+	public List<ListPosition> findAllByShop(Shop shop) {
+		return persistencePort.findAllByShop(shop);
 	}
 
 }
