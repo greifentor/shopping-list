@@ -4,9 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import de.ollie.shoppinglist.persistence.entity.ListPositionDBO;
-import de.ollie.shoppinglist.persistence.entity.ShopDBO;
 import lombok.Generated;
 import java.util.List;
+
+import de.ollie.shoppinglist.persistence.entity.ShopDBO;
 
 /**
  * A generated JPA repository for list_positions.
