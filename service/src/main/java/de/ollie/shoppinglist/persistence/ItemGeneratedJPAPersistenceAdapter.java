@@ -1,24 +1,26 @@
 package de.ollie.shoppinglist.persistence;
 
+import static de.ollie.shoppinglist.util.Check.ensure;
+
 import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import de.ollie.shoppinglist.core.model.Item;
 import de.ollie.shoppinglist.core.model.Page;
 import de.ollie.shoppinglist.core.model.PageParameters;
-import de.ollie.shoppinglist.core.model.Item;
+import de.ollie.shoppinglist.core.model.User;
+import de.ollie.shoppinglist.core.service.exception.NotNullConstraintViolationException;
 import de.ollie.shoppinglist.core.service.port.persistence.ItemPersistencePort;
+import de.ollie.shoppinglist.persistence.converter.ItemDBOConverter;
 import de.ollie.shoppinglist.persistence.converter.PageConverter;
 import de.ollie.shoppinglist.persistence.converter.PageParametersToPageableConverter;
-import de.ollie.shoppinglist.persistence.converter.ItemDBOConverter;
+import de.ollie.shoppinglist.persistence.converter.UserDBOConverter;
 import de.ollie.shoppinglist.persistence.entity.ItemDBO;
 import de.ollie.shoppinglist.persistence.repository.ItemDBORepository;
-import de.ollie.shoppinglist.persistence.converter.UserDBOConverter;
 import lombok.Generated;
-
-import de.ollie.shoppinglist.core.model.User;
 
 /**
  * A generated JPA persistence adapter for items.
@@ -48,7 +50,7 @@ public abstract class ItemGeneratedJPAPersistenceAdapter implements ItemPersiste
 	@Override
 	public Item create(Item model) {
 		model.setId(-1);
-		return converter.toModel(repository.save(converter.toDBO(model)));
+		return update(model);
 	}
 
 	@Override
@@ -68,6 +70,12 @@ public abstract class ItemGeneratedJPAPersistenceAdapter implements ItemPersiste
 
 	@Override
 	public Item update(Item model) {
+		ensure(
+				model.getName() != null,
+				() -> new NotNullConstraintViolationException("item field name cannot be null.", "Item", "name"));
+		ensure(
+				model.getShop() != null,
+				() -> new NotNullConstraintViolationException("item field shop cannot be null.", "Item", "shop"));
 		return converter.toModel(repository.save(converter.toDBO(model)));
 	}
 
