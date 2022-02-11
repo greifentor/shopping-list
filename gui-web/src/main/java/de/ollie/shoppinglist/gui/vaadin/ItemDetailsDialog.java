@@ -23,9 +23,13 @@ public class ItemDetailsDialog extends Dialog {
 	private ComboBox<Shop> comboBoxShops;
 	private TextField textFieldName;
 	private NumberField numberFieldSortOrder;
+	private ResourceManager resourceManager;
+	private SessionData sessionData;
 
 	public ItemDetailsDialog(Item item, ItemDetailsDialogObserver observer, ResourceManager resourceManager,
 			SessionData sessionData, ShopService shopService) {
+		this.resourceManager = resourceManager;
+		this.sessionData = sessionData;
 		VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(false);
 		comboBoxShops = new ComboBox<>();
@@ -43,6 +47,7 @@ public class ItemDetailsDialog extends Dialog {
 								.findAllByUser(sessionData.getAuthorizationData().getUser())
 								.stream()
 								.sorted((i0, i1) -> i0.getName().compareTo(i1.getName())));
+		comboBoxShops.setRequired(true);
 		comboBoxShops.setValue(item.getShop());
 		textFieldName =
 				new TextField(
@@ -52,6 +57,7 @@ public class ItemDetailsDialog extends Dialog {
 										sessionData.getLocalization()));
 		textFieldName.setWidthFull();
 		textFieldName.setValue(item.getName());
+		textFieldName.setRequired(true);
 		numberFieldSortOrder =
 				new NumberField(
 						resourceManager
@@ -81,6 +87,23 @@ public class ItemDetailsDialog extends Dialog {
 		item.setName(textFieldName.getValue());
 		item.setSortOrder(numberFieldSortOrder.getValue().intValue());
 		item.setShop(comboBoxShops.getValue());
+		if ((item.getName() == null) || item.getName().isEmpty()) {
+			textFieldName.getStyle().set("color", "red");
+			textFieldName
+					.setPlaceholder(
+							resourceManager
+									.getLocalizedString(
+											"ItemDetailsDialog.textFieldName.errorMessageNotFilled",
+											sessionData.getLocalization()));
+			textFieldName.focus();
+			return;
+		} else {
+			textFieldName.getStyle().set("color", "black");
+		}
+		if (item.getShop() == null) {
+			comboBoxShops.focus();
+			return;
+		}
 		close();
 		observer.itemChanged(item);
 	}

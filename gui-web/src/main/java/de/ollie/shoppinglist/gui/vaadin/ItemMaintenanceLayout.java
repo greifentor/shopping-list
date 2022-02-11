@@ -9,12 +9,14 @@ import de.ollie.shoppinglist.core.model.Item;
 import de.ollie.shoppinglist.core.model.Shop;
 import de.ollie.shoppinglist.core.service.ItemService;
 import de.ollie.shoppinglist.core.service.ShopService;
+import de.ollie.shoppinglist.core.service.exception.NotNullConstraintViolationException;
 import de.ollie.shoppinglist.core.service.localization.ResourceManager;
 import de.ollie.shoppinglist.gui.SessionData;
 import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ActionType;
 import de.ollie.shoppinglist.gui.vaadin.ShoppingListEventManager.ItemShoppingListEvent;
 import de.ollie.shoppinglist.gui.vaadin.component.Button;
 import de.ollie.shoppinglist.gui.vaadin.component.ButtonFactory;
+import de.ollie.shoppinglist.gui.vaadin.component.ErrorNotificationProvider;
 
 public class ItemMaintenanceLayout extends VerticalLayout {
 
@@ -133,9 +135,13 @@ public class ItemMaintenanceLayout extends VerticalLayout {
 
 	private void saveItem(Item item) {
 		sessionData.getAccessChecker().checkToken();
-		itemService.update(item);
-		eventManager.fireShoppingListEvent(new ItemShoppingListEvent(ActionType.ADD, item));
-		updateGridItems();
+		try {
+			itemService.update(item);
+			eventManager.fireShoppingListEvent(new ItemShoppingListEvent(ActionType.ADD, item));
+			updateGridItems();
+		} catch (NotNullConstraintViolationException nncve) {
+			ErrorNotificationProvider.open(nncve.getMessage(), "Schießen");
+		}
 	}
 
 	private void removeItem() {
