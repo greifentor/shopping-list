@@ -1,5 +1,8 @@
 package de.ollie.shoppinglist.gui.vaadin;
 
+import java.util.function.Supplier;
+
+import com.vaadin.flow.component.HasHelper;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -36,6 +39,12 @@ public class ItemDetailsDialog extends Dialog {
 		comboBoxShops.setWidthFull();
 		comboBoxShops.setItemLabelGenerator(shop -> shop.getName());
 		comboBoxShops
+				.addBlurListener(
+						event -> triggerHelperText(
+								comboBoxShops,
+								() -> comboBoxShops.getValue() == null,
+								"ItemDetailsDialog.comboBoxShops.errorMessageNotFilled"));
+		comboBoxShops
 				.setLabel(
 						resourceManager
 								.getLocalizedString(
@@ -55,6 +64,12 @@ public class ItemDetailsDialog extends Dialog {
 								.getLocalizedString(
 										"ItemDetailsDialog.textFieldName.label",
 										sessionData.getLocalization()));
+		textFieldName
+				.addBlurListener(
+						event -> triggerHelperText(
+								textFieldName,
+								() -> textFieldName.getValue().isEmpty(),
+								"ItemDetailsDialog.textFieldName.errorMessageNotFilled"));
 		textFieldName.setWidthFull();
 		textFieldName.setValue(item.getName());
 		textFieldName.setRequired(true);
@@ -79,6 +94,16 @@ public class ItemDetailsDialog extends Dialog {
 		add(layout);
 	}
 
+	private void triggerHelperText(HasHelper component, Supplier<Boolean> isValueEmpty, String errorMessageResourceId) {
+		if (isValueEmpty.get()) {
+			component
+					.setHelperText(
+							resourceManager.getLocalizedString(errorMessageResourceId, sessionData.getLocalization()));
+		} else {
+			component.setHelperText(null);
+		}
+	}
+
 	private void cancelDialog() {
 		close();
 	}
@@ -88,17 +113,8 @@ public class ItemDetailsDialog extends Dialog {
 		item.setSortOrder(numberFieldSortOrder.getValue().intValue());
 		item.setShop(comboBoxShops.getValue());
 		if ((item.getName() == null) || item.getName().isEmpty()) {
-			textFieldName.getStyle().set("color", "red");
-			textFieldName
-					.setPlaceholder(
-							resourceManager
-									.getLocalizedString(
-											"ItemDetailsDialog.textFieldName.errorMessageNotFilled",
-											sessionData.getLocalization()));
 			textFieldName.focus();
 			return;
-		} else {
-			textFieldName.getStyle().set("color", "black");
 		}
 		if (item.getShop() == null) {
 			comboBoxShops.focus();
