@@ -1,6 +1,7 @@
 package de.ollie.shoppinglist.gui.vaadin;
 
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.vaadin.flow.component.HasHelper;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -55,7 +56,8 @@ public class ItemDetailsDialog extends Dialog {
 						shopService
 								.findAllByUser(sessionData.getAuthorizationData().getUser())
 								.stream()
-								.sorted((i0, i1) -> i0.getName().compareTo(i1.getName())));
+								.sorted((i0, i1) -> i0.getName().compareTo(i1.getName()))
+								.collect(Collectors.toList()));
 		comboBoxShops.setRequired(true);
 		comboBoxShops.setValue(item.getShop());
 		textFieldName =

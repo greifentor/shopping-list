@@ -1,5 +1,7 @@
 package de.ollie.shoppinglist.gui.vaadin;
 
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -99,7 +101,8 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 									.findAllByUser(sessionData.getAuthorizationData().getUser())
 									.stream()
 									.filter(item -> (item.getShop().getId() == shop.getId()))
-									.sorted((i0, i1) -> i0.getName().compareTo(i1.getName())));
+									.sorted((i0, i1) -> i0.getName().compareTo(i1.getName()))
+									.collect(Collectors.toList()));
 		}
 	}
 
@@ -137,7 +140,8 @@ public class ShoppingListPositionsLayout extends VerticalLayout implements Shopp
 									.findAll()
 									.stream()
 									.filter(this::matchesToShopAndUser)
-									.sorted((lp0, lp1) -> getSortOrder(lp0.getItem()) - getSortOrder(lp1.getItem())));
+									.sorted((lp0, lp1) -> getSortOrder(lp0.getItem()) - getSortOrder(lp1.getItem()))
+									.collect(Collectors.toList()));
 		}
 	}
 
