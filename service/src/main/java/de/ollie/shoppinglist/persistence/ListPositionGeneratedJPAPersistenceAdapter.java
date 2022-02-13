@@ -1,5 +1,7 @@
 package de.ollie.shoppinglist.persistence;
 
+import static de.ollie.shoppinglist.util.Check.ensure;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +11,7 @@ import javax.inject.Inject;
 import de.ollie.shoppinglist.core.model.Page;
 import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.ListPosition;
+import de.ollie.shoppinglist.core.service.exception.NotNullConstraintViolationException;
 import de.ollie.shoppinglist.core.service.port.persistence.ListPositionPersistencePort;
 import de.ollie.shoppinglist.persistence.converter.PageConverter;
 import de.ollie.shoppinglist.persistence.converter.PageParametersToPageableConverter;
@@ -68,6 +71,15 @@ public abstract class ListPositionGeneratedJPAPersistenceAdapter implements List
 
 	@Override
 	public ListPosition update(ListPosition model) {
+		ensure(
+				model.getItem() != null,
+				() -> new NotNullConstraintViolationException("ListPosition field item cannot be null.", "ListPosition", "item"));
+		ensure(
+				model.getShop() != null,
+				() -> new NotNullConstraintViolationException("ListPosition field shop cannot be null.", "ListPosition", "shop"));
+		ensure(
+				model.getUser() != null,
+				() -> new NotNullConstraintViolationException("ListPosition field user cannot be null.", "ListPosition", "user"));
 		return converter.toModel(repository.save(converter.toDBO(model)));
 	}
 

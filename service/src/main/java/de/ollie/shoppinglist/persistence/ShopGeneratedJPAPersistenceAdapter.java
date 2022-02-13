@@ -1,5 +1,7 @@
 package de.ollie.shoppinglist.persistence;
 
+import static de.ollie.shoppinglist.util.Check.ensure;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +11,7 @@ import javax.inject.Inject;
 import de.ollie.shoppinglist.core.model.Page;
 import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.Shop;
+import de.ollie.shoppinglist.core.service.exception.NotNullConstraintViolationException;
 import de.ollie.shoppinglist.core.service.port.persistence.ShopPersistencePort;
 import de.ollie.shoppinglist.persistence.converter.PageConverter;
 import de.ollie.shoppinglist.persistence.converter.PageParametersToPageableConverter;
@@ -68,6 +71,12 @@ public abstract class ShopGeneratedJPAPersistenceAdapter implements ShopPersiste
 
 	@Override
 	public Shop update(Shop model) {
+		ensure(
+				model.getUser() != null,
+				() -> new NotNullConstraintViolationException("Shop field user cannot be null.", "Shop", "user"));
+		ensure(
+				model.getName() != null,
+				() -> new NotNullConstraintViolationException("Shop field name cannot be null.", "Shop", "name"));
 		return converter.toModel(repository.save(converter.toDBO(model)));
 	}
 

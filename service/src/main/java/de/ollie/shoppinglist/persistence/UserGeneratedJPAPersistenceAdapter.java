@@ -1,5 +1,7 @@
 package de.ollie.shoppinglist.persistence;
 
+import static de.ollie.shoppinglist.util.Check.ensure;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +11,7 @@ import javax.inject.Inject;
 import de.ollie.shoppinglist.core.model.Page;
 import de.ollie.shoppinglist.core.model.PageParameters;
 import de.ollie.shoppinglist.core.model.User;
+import de.ollie.shoppinglist.core.service.exception.NotNullConstraintViolationException;
 import de.ollie.shoppinglist.core.service.port.persistence.UserPersistencePort;
 import de.ollie.shoppinglist.persistence.converter.PageConverter;
 import de.ollie.shoppinglist.persistence.converter.PageParametersToPageableConverter;
@@ -63,6 +66,12 @@ public abstract class UserGeneratedJPAPersistenceAdapter implements UserPersiste
 
 	@Override
 	public User update(User model) {
+		ensure(
+				model.getName() != null,
+				() -> new NotNullConstraintViolationException("User field name cannot be null.", "User", "name"));
+		ensure(
+				model.getToken() != null,
+				() -> new NotNullConstraintViolationException("User field token cannot be null.", "User", "token"));
 		return converter.toModel(repository.save(converter.toDBO(model)));
 	}
 
